@@ -1,4 +1,4 @@
-project("minesweeper-sweeper")
+project("minesweeper-solver")
 
 # Files to compile
 file(GLOB_RECURSE sources *.cpp *.hpp)

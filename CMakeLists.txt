@@ -13,6 +13,7 @@ add_subdirectory(${CMAKE_MODULE_PATH}/catch)
 
 # Add projects
 add_subdirectory(src)
+add_subdirectory(bin)
 add_subdirectory(test)
 
 enable_testing()
