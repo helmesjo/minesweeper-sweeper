@@ -1,4 +1,4 @@
-project("hello-cmake")
+project("minesweeper-sweeper")
 
 # Files to compile
 file(GLOB_RECURSE sources *.cpp *.hpp)
