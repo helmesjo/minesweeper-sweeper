@@ -1,4 +1,4 @@
-project("hellocmake" CXX)
+project("minesweeper_sweeper" CXX)
 
 # ---------------	METADATA
 
