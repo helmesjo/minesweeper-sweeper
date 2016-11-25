@@ -16,10 +16,7 @@ add_subdirectory(${CMAKE_MODULE_PATH}/catch)
 add_subdirectory(${CMAKE_MODULE_PATH}/cpplocate)
 set(cpplocate_DIR ${CMAKE_MODULE_PATH}/cpplocate)
 
-# ---------------	BUILD LIB & TESTS
+# ---------------	BUILD BIN, LIB & TEST
 add_subdirectory(src)
 add_subdirectory(bin)
 add_subdirectory(test)
-
-enable_testing()
-add_test(NAME ${TEST_PROJECT_NAME} COMMAND ${TEST_PROJECT_NAME})

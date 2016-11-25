@@ -6,7 +6,7 @@
 #include "calculator.hpp"
 #include "resources.h"
 
-using namespace hellocmake_tests;
+using namespace minesweeper_solver_tests;
 
 TEST_CASE("calculator.sum()", "calculator") {
 	calculator t;

@@ -1,4 +1,4 @@
-project("minesweeper_sweeper" CXX)
+project("minesweeper_solver" CXX)
 
 # ---------------	METADATA
 
