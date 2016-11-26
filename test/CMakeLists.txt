@@ -11,7 +11,7 @@ set(META_BINARY_PATH ${CMAKE_BINARY_DIR})
 
 # ---------------	GROUP FILES
 
-file(GLOB_RECURSE sources *.cpp *.hpp)
+file(GLOB_RECURSE sources *.cpp *.hpp *.h)
 file(GLOB_RECURSE resources resources/*)
 source_group(Resources FILES ${resources})
 
