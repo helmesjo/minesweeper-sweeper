@@ -8,10 +8,10 @@
 int main(int argc, char* argv[])
 {
 	using namespace std;
-	typedef std::chrono::high_resolution_clock high_resolution_clock;
-	typedef std::chrono::milliseconds milliseconds;
+	using std::chrono::high_resolution_clock;
+	using std::chrono::milliseconds;
 
-	std::string processName = "Minesweeper";
+	auto processName = "Minesweeper"s;
 	HWND hwnd = FindWindow(processName.c_str(), NULL);    //the window can't be min
 	if (hwnd == NULL)
 	{
@@ -19,21 +19,19 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
-	chrono::high_resolution_clock clock;
+	auto clock = chrono::high_resolution_clock();
 	auto start = clock.now();
 
 	auto windowPrinter = WindowPrinter(hwnd);
-	auto filePath = cpplocate::getModulePath() + "/" + "test.jpg";
-	for (auto i = 0u; i < 100; i++)
+	for (auto i = 0u; i < 1000; i++)
 		windowPrinter.PrintWindow();
 
 	auto elapsed = std::chrono::duration_cast<milliseconds>(high_resolution_clock::now() - start);
-
 	cout << "Elapsed time: " << elapsed.count() << endl;
 
+	//auto filePath = cpplocate::getModulePath() + "/" + "test.jpg";
 	//windowPrinter.PrintAndSaveToFile(filePath);
-	
-	cout << "Printed to file!" << endl;
+	//cout << "Printed to file!" << endl;
 
 	return 0;
 }

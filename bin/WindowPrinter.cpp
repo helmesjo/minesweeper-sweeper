@@ -1,8 +1,11 @@
 #include "WindowPrinter.h"
+#include <stdexcept>
 
-WindowPrinter::WindowPrinter(HWND windowHandle) noexcept :
+WindowPrinter::WindowPrinter(HWND windowHandle) :
 	windowHandle(windowHandle)
 {
+	if (windowHandle == nullptr)
+		throw std::invalid_argument("Handle to window must not be null");
 }
 
 std::shared_ptr<CImage> WindowPrinter::PrintWindow()

@@ -8,12 +8,11 @@
 class WindowPrinter {
 
 public:
-	WindowPrinter(HWND windowHandle) noexcept;
+	WindowPrinter(HWND windowHandle);
 
 	std::shared_ptr<ATL::CImage> PrintWindow();
 	void PrintAndSaveToFile(std::string filePath);
 
 private:
 	HWND windowHandle;
-
 };
