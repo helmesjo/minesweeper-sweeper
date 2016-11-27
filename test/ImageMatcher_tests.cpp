@@ -7,7 +7,7 @@
 
 using namespace minesweeper_solver_tests;
 using namespace helmesjo;
-
+/*
 SCENARIO("Image matching", "[imagematcher]") {
 	auto referenceImage = Image(resources::IMG_MINE_TILE_FLAG);
 	auto imageMatcher = ImageMatcher(referenceImage);
@@ -41,3 +41,4 @@ SCENARIO("Image matching", "[imagematcher]") {
 	}
 
 }
+*/
