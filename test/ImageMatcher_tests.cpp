@@ -9,10 +9,12 @@ using namespace minesweeper_solver_tests;
 using namespace helmesjo;
 
 SCENARIO("Image matching", "[imagematcher]") {
-	auto imageMatcher = ImageMatcher();
+	auto referenceImage = Image(resources::IMG_MINE_TILE_FLAG);
+	auto imageMatcher = ImageMatcher(referenceImage);
 
 	GIVEN("image matcher contains no/non-matching reference image") {
-		auto image = Image(resources::RESOURCE1);
+		auto imagePath = resources::getPath(resources::IMG_MINE_TILE_BOMB);
+		auto image = Image(imagePath);
 
 		WHEN("passed image is compared") 
 		{
@@ -25,7 +27,8 @@ SCENARIO("Image matching", "[imagematcher]") {
 	}
 
 	GIVEN("image matcher contains matching reference image") {
-		auto image = Image(resources::RESOURCE1);
+		auto imagePath = resources::getPath(resources::IMG_MINE_TILE_FLAG);
+		auto image = Image(imagePath);
 
 		WHEN("passed image is compared")
 		{

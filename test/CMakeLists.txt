@@ -7,11 +7,12 @@ project(${MAIN_PROJECT_NAME}_tests CXX)
 set(META_PROJECT_NAME ${PROJECT_NAME})
 set(META_PROJECT_NAMESPACE ${META_PROJECT_NAME})
 set(META_OUTPUT_NAME ${META_PROJECT_NAME})
+set(META_RESOURCES_DIR resources/)
 
 # ---------------	GROUP FILES
 
 file(GLOB_RECURSE sources *.cpp *.hpp *.h)
-file(GLOB_RECURSE resources resources/*)
+file(GLOB_RECURSE resources ${META_RESOURCES_DIR}*)
 source_group(Resources FILES ${resources})
 
 # ---------------	BUILD
@@ -23,8 +24,8 @@ set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT
 add_custom_command(TARGET ${PROJECT_NAME} 
 	POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-		"${PROJECT_SOURCE_DIR}/resources"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>/resources
+		${PROJECT_SOURCE_DIR}/${META_RESOURCES_DIR}
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/${META_RESOURCES_DIR}
 )
 
 # ---------------	CONFIGURE

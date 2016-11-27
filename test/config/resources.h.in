@@ -1,11 +1,22 @@
 #pragma once
 
 #include "config.h"
+#include <string>
 
 namespace @META_PROJECT_NAMESPACE@ {
-	ConstChar RESOURCE_FOLDER_PATH = "@META_OUTPUT_PATH@";
-
 	namespace resources {
-		ConstChar RESOURCE1 = "resources/test.txt";
+		std::string getPath(std::string resourceName);
+		
+		const std::string RESOURCE_FOLDER_PATH = "/@META_RESOURCES_DIR@";
+		
+		const std::string IMG_MINE_WINDOW = "img-mine-window.png";
+		const std::string IMG_MINE_GRID = "img-mine-grid.png";
+		
+		const std::string IMG_MINE_TILE_EMPTY = "img-mine-tile-empty.png";
+		const std::string IMG_MINE_TILE_BOMB = "img-mine-tile-bomb.png";
+		const std::string IMG_MINE_TILE_FLAG = "img-mine-tile-flag.png";
+		
+		const std::string IMG_MINE_TILE_ONE = "img-mine-tile-one";
+		const std::string IMG_MINE_TILE_TWO = "img-mine-tile-two";
 	}
 }

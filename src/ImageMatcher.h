@@ -6,8 +6,12 @@ namespace helmesjo {
 
 	class ImageMatcher {
 	public:
+		ImageMatcher(const Image& image);
 
 		bool isMatch(const Image& image);
+
+	private:
+		const Image& referenceImage;
 	};
 
 }
