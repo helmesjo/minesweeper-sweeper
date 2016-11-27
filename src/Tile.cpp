@@ -1,14 +1,13 @@
 #include "Tile.h"
+#include "Grid.h"
 
 #include <ostream>
 #include <string>
+#include <type_traits>
 
-helmesjo::Tile::Tile(State state):
-	state(state)
-{
-}
+static_assert(std::is_pod<helmesjo::Tile>::value, "Tile must be POD-type");
 
-std::ostream & helmesjo::operator<<(std::ostream & os, const Tile::State state)
+std::ostream & helmesjo::operator<<(std::ostream & os, Tile::State state)
 {
 	{
 		using State = Tile::State;
@@ -16,7 +15,7 @@ std::ostream & helmesjo::operator<<(std::ostream & os, const Tile::State state)
 		auto name = std::string("");
 		switch (state)
 		{
-		case State::Empty:
+		case State::Unknown:
 			name = "Empty";
 			break;
 		case State::Flag:

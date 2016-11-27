@@ -3,7 +3,8 @@
 
 using namespace helmesjo;
 
-Tile helmesjo::Sweeper::findNextMove(const Grid & grid)
+GridMove helmesjo::Sweeper::findNextMove(const Grid & grid)
 {
-	return Tile(Tile::State::Flag);
+	Tile tile{ Tile::State::Flag };
+	return GridMove(0, 0, tile);
 }

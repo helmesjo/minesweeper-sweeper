@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Tile.h"
+#include "GridMove.h"
 
 namespace helmesjo {
 
@@ -8,7 +8,7 @@ namespace helmesjo {
 
 	class Sweeper {
 	public:
-		Tile findNextMove(const Grid& grid);
+		GridMove findNextMove(const Grid& grid);
 	};
 
 }

@@ -3,18 +3,15 @@
 #include <ostream>
 
 namespace helmesjo {
-
 	struct Tile {
 		enum class State : char {
+			Unknown = 0,
 			Flag,
-			Empty,
 			One,
 		};
 
-		Tile(State state);
-
-		const State state;
+		State state;
 	};
 
-	std::ostream& operator << (std::ostream& os, const Tile::State state);
+	std::ostream& operator << (std::ostream& os, Tile::State state);
 }
