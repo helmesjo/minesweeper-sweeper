@@ -1,5 +1,6 @@
 #pragma once
 
+// Don't want this here, but can't get Catch::toString working (if so, it would be defined for tests only)
 #include <ostream>
 
 namespace helmesjo {

@@ -3,8 +3,7 @@
 
 #include <ostream>
 #include <string>
-#include <type_traits>
-#include <string>
+//#include <type_traits>
 
 using namespace helmesjo;
 
