@@ -15,6 +15,8 @@ helmesjo::Sweeper::Sweeper(const Grid & grid):
 
 void helmesjo::Sweeper::calculateMineProbabilities(const Grid & grid)
 {
+	resetProbabilities();
+
 	for (auto tile : grid) {
 		if (tile.state == Tile::State::Number) {
 			auto adjacent = grid.getAdjacent(tile);
@@ -22,7 +24,7 @@ void helmesjo::Sweeper::calculateMineProbabilities(const Grid & grid)
 				// 1.0 should be the number of the tile (or some actual mathematical calculation of probability!)
 				auto mineProbability = 1.0 / adjacent.size();
 				for (auto adj : adjacent)
-					setMineProbability(adj, mineProbability);
+					addMineProbability(adj, mineProbability);
 			}
 		}
 	}
@@ -34,8 +36,14 @@ double helmesjo::Sweeper::getMineProbability(Tile tile) const
 	return mineProbabilities[index];
 }
 
-void helmesjo::Sweeper::setMineProbability(Tile tile, double probability)
+void helmesjo::Sweeper::addMineProbability(Tile tile, double probability)
 {
 	auto index = rowBasedIndex(grid.getWidth(), tile.x, tile.y);
-	mineProbabilities[index] = probability;
+	mineProbabilities[index] += probability;
+}
+
+void helmesjo::Sweeper::resetProbabilities()
+{
+	for (auto& prob : mineProbabilities)
+		prob = 0.0;
 }

@@ -16,7 +16,8 @@ namespace helmesjo {
 		double getMineProbability(Tile tile) const;
 
 	private:
-		void setMineProbability(Tile tile, double probability);
+		void addMineProbability(Tile tile, double probability);
+		void resetProbabilities();
 
 		const Grid& grid;
 		std::vector<double> mineProbabilities;
