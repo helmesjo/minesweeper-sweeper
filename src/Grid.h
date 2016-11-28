@@ -10,6 +10,9 @@ namespace helmesjo {
 	public:
 		Grid(unsigned int nrColumns, unsigned int nrRows, Tile::State defaultState = Tile::State::Unknown);
 
+		unsigned int getWidth() const;
+		unsigned int getHeight() const;
+
 		Tile getTile(unsigned int x, unsigned int y) const;
 		void setTileState(unsigned int x, unsigned int y, Tile::State state);
 

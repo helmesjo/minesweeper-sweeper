@@ -8,7 +8,7 @@ namespace helmesjo {
 		enum class State : char {
 			Unknown = 0,
 			Flag,
-			One,
+			Number,
 		};
 
 		Tile() = default;

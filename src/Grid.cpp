@@ -9,6 +9,10 @@ struct direction {
 };
 const std::array<direction, 8> directions = {{{-1,-1} , {-1,0} , {-1,1} , {0,-1} , {0,1} , {1,-1} , {1,0} , {1,1}}};
 
+static int rowBasedIndex(unsigned int width, unsigned int x, unsigned int y) {
+	return width * y + x;
+}
+
 helmesjo::Grid::Grid(unsigned int nrColumns, unsigned int nrRows, Tile::State defaultState):
 	width(nrColumns),
 	height(nrRows),
@@ -19,15 +23,25 @@ helmesjo::Grid::Grid(unsigned int nrColumns, unsigned int nrRows, Tile::State de
 			setTileState(x, y, defaultState);
 }
 
+unsigned int helmesjo::Grid::getWidth() const
+{
+	return width;
+}
+
+unsigned int helmesjo::Grid::getHeight() const
+{
+	return height;
+}
+
 Tile helmesjo::Grid::getTile(unsigned int x, unsigned int y) const
 {
-	auto index = width * y + x;
+	auto index = rowBasedIndex(width, x, y);
 	return grid[index];
 }
 
 void helmesjo::Grid::setTileState(unsigned int x, unsigned int y, Tile::State state)
 {
-	auto index = width * y + x;
+	auto index = rowBasedIndex(width, x, y);
 	grid[index] = Tile(state, x, y);
 }
 

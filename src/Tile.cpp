@@ -30,7 +30,7 @@ std::ostream & helmesjo::operator<<(std::ostream & os, Tile::State state)
 		case State::Flag:
 			name = "Flag";
 			break;
-		case State::One:
+		case State::Number:
 			name = "One";
 			break;
 		}
