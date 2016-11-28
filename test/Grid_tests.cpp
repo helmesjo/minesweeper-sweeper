@@ -1,4 +1,5 @@
 #include <catch.hpp>
+#include <algorithm>
 
 #include "Grid.h"
 
@@ -8,16 +9,23 @@ using State = Tile::State;
 SCENARIO("Manipulate grid", "[Grid]") {
 	auto grid = Grid(3, 3);
 
-	GIVEN("a 3x3 grid") {
+	GIVEN("a 3x3 grid with all unknown") {
 		auto grid = Grid(3, 3);
-		auto tile22 = grid.getTile(2, 2);
+
+		WHEN("tile is returned for index (2, 2)") {
+			auto tile22 = grid.getTile(2, 2);
+			THEN("tile has indexes x & y set to (2, 2) respectively") {
+				REQUIRE(tile22.x == 2);
+				REQUIRE(tile22.y == 2);
+			}
+		}
 
 		WHEN("tile with a different state is assigned to specific position in grid") {
-			auto tile = Tile{ State::Flag };
-			grid.setTile(1, 1, tile);
+			auto tile22 = grid.getTile(2, 2);
+			grid.setTileState(tile22.x, tile22.y, State::Flag);
 
-			THEN("the tile returned for same position has this new state") {
-				auto tile2 = grid.getTile(1, 1);
+			THEN("the tile returned for same position has the new state") {
+				auto tile2 = grid.getTile(tile22.x, tile22.y);
 
 				REQUIRE(tile2.state != tile22.state);
 			}
@@ -28,15 +36,31 @@ SCENARIO("Manipulate grid", "[Grid]") {
 SCENARIO("Access grid", "[Grid]") {
 	auto grid = Grid(3, 3);
 
-	GIVEN("a 3x3 grid") {
+	GIVEN("a 3x3 grid with all unknown") {
 		auto grid = Grid(3, 3);
 
 		WHEN("neighbors are requested for center tile") {
-			auto adjacent = grid.getAdjacent(2, 2);
+			grid.setTileState(1, 1, State::Flag);
+			auto adjacent = grid.getAdjacent(1, 1);
 
-			THEN("return all 8 adjacent nodes") {
+			THEN("return all tiles except center") {
 
 				REQUIRE(adjacent.size() == 8);
+				for (auto tile : adjacent)
+					REQUIRE(tile.state != State::Flag);
+			}
+		}
+
+		WHEN("neighbors are requested for corner tile") {
+			grid.setTileState(0, 0, State::Flag);
+			auto adjacent = grid.getAdjacent(0, 0);
+
+			THEN("return all 3 adjacent tiles") {
+				REQUIRE(adjacent.size() == 3);
+				auto hasAboveAdjacent = std::any_of(adjacent.cbegin(), adjacent.cend(), [](auto t) {
+					return t.x == 0u && t.y == 1u;
+				});
+				REQUIRE(hasAboveAdjacent == true);
 			}
 		}
 	}

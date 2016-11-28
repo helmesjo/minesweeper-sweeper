@@ -10,7 +10,12 @@ namespace helmesjo {
 			One,
 		};
 
-		State state;
+		Tile() = default;
+		Tile(State state, unsigned int x, unsigned int y);
+
+		State state = State::Unknown;
+		unsigned int x = 0u, y = 0u;
+		unsigned int mineProbability = 0u;
 	};
 
 	std::ostream& operator << (std::ostream& os, Tile::State state);

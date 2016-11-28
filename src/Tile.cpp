@@ -4,8 +4,18 @@
 #include <ostream>
 #include <string>
 #include <type_traits>
+#include <string>
 
-static_assert(std::is_pod<helmesjo::Tile>::value, "Tile must be POD-type");
+using namespace helmesjo;
+
+//static_assert(std::is_pod<Tile>::value, "Tile is not POD-type");
+
+helmesjo::Tile::Tile(State state, unsigned int x, unsigned int y) :
+	state(state),
+	x(x),
+	y(y)
+{
+}
 
 std::ostream & helmesjo::operator<<(std::ostream & os, Tile::State state)
 {
