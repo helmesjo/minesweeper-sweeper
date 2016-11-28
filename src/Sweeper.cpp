@@ -3,8 +3,14 @@
 
 using namespace helmesjo;
 
-TileData helmesjo::Sweeper::findNextMove(const Grid & grid)
+void helmesjo::Sweeper::calculateMineProbabilities(const Grid & grid)
 {
-	Tile tile;
-	return TileData(tile);
+	for (auto tile : grid) {
+		
+	}
+}
+
+double helmesjo::Sweeper::getMineProbability(Tile tile) const
+{
+	return 0.0;
 }

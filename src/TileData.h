@@ -7,8 +7,8 @@ namespace helmesjo {
 	struct TileData {
 		TileData(Tile tile);
 
-		const Tile tile;
-		const unsigned int isMineProbability = 0u;
+		Tile tile;
+		unsigned int isMineProbability = 0u;
 	};
 
 }

@@ -16,11 +16,16 @@ SCENARIO("Solving grid", "[Sweeper]") {
 		WHEN("tile (1, 1) is number 1") {
 			auto tile = grid.getTile(1, 1);
 			grid.setTileState(tile.x, tile.y, State::One);
-			//sweeper.calculateMineProbabilities();
+			sweeper.calculateMineProbabilities(grid);
 
 			THEN("adjacent tiles should have a mine-probability of 1/8 (1/nrAdjacent)") {
 				auto adjacent = grid.getAdjacent(tile);
-				FAIL();
+				const double expectedMineProbability = 1.0 / adjacent.size();
+				for (auto tile : adjacent)
+				{
+					auto mineProbability = sweeper.getMineProbability(tile);
+					REQUIRE(mineProbability == expectedMineProbability);
+				}
 				//auto hasMineProbabilityGreaterThanZero = std::all_of();
 			}
 		}
@@ -33,12 +38,13 @@ SCENARIO("Solving grid", "[Sweeper]") {
 			grid.setTileState(0, 0, State::One);
 			
 			THEN("suggest tile (0, 0) is marked with flag") {
-				auto nextMove = sweeper.findNextMove(grid);
-
-				auto suggestedTile = nextMove.tile;
-				auto suggestedColumn = nextMove.tile.x;
-				REQUIRE(suggestedTile.state == State::Flag);
-				REQUIRE(suggestedColumn == 0);
+				//auto nextMove = sweeper.findNextMove(grid);
+				//
+				//auto suggestedTile = nextMove.tile;
+				//auto suggestedColumn = nextMove.tile.x;
+				//REQUIRE(suggestedTile.state == State::Flag);
+				//REQUIRE(suggestedColumn == 0);
+				FAIL();
 			}
 		}
 		/*
