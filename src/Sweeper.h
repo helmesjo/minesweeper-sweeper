@@ -11,8 +11,8 @@ namespace helmesjo {
 	public:
 		Sweeper(const Grid& grid);
 
-		//Tile findNextMove(const Grid& grid);
-		void calculateMineProbabilities(const Grid& grid);
+		//Tile findMostProbableMine();
+		void calculateMineProbabilities();
 		double getMineProbability(Tile tile) const;
 
 	private:

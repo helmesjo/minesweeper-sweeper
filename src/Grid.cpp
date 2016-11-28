@@ -19,8 +19,8 @@ helmesjo::Grid::Grid(unsigned int nrColumns, unsigned int nrRows, Tile::State de
 	grid(nrColumns *nrRows)
 {
 	for (auto x = 0u; x < nrColumns; x++)
-		for (auto y = 0u; y < nrRows; y++) 
-			setTileState(x, y, defaultState);
+		for (auto y = 0u; y < nrRows; y++)
+			setTile(Tile(defaultState, x, y));
 }
 
 unsigned int helmesjo::Grid::getWidth() const
@@ -33,16 +33,21 @@ unsigned int helmesjo::Grid::getHeight() const
 	return height;
 }
 
+unsigned int helmesjo::Grid::size() const
+{
+	return grid.size();
+}
+
 Tile helmesjo::Grid::getTile(unsigned int x, unsigned int y) const
 {
 	auto index = rowBasedIndex(width, x, y);
 	return grid[index];
 }
 
-void helmesjo::Grid::setTileState(unsigned int x, unsigned int y, Tile::State state)
+void helmesjo::Grid::setTile(Tile tile)
 {
-	auto index = rowBasedIndex(width, x, y);
-	grid[index] = Tile(state, x, y);
+	auto index = rowBasedIndex(width, tile.x, tile.y);
+	grid[index] = tile;
 }
 
 Grid::TileVec helmesjo::Grid::getAdjacent(Tile tile) const

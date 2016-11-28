@@ -12,9 +12,10 @@ namespace helmesjo {
 
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;
+		unsigned int size() const;
 
 		Tile getTile(unsigned int x, unsigned int y) const;
-		void setTileState(unsigned int x, unsigned int y, Tile::State state);
+		void setTile(Tile tile);
 
 		std::vector<Tile> getAdjacent(Tile tile) const;
 

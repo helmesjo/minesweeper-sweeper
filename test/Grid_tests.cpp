@@ -20,14 +20,15 @@ SCENARIO("Manipulate grid", "[Grid]") {
 			}
 		}
 
-		WHEN("tile with a different state is assigned to specific position in grid") {
+		WHEN("tile with a different state is assigned to position (2,2)") {
 			auto tile22 = grid.getTile(2, 2);
-			grid.setTileState(tile22.x, tile22.y, State::Flag);
+			tile22.state = Tile::State::Flag;
+			grid.setTile(tile22);
 
-			THEN("the tile returned for same position has the new state") {
+			THEN("the tile returned for position (2,2) has the new state") {
 				auto tile2 = grid.getTile(tile22.x, tile22.y);
 
-				REQUIRE(tile2.state != tile22.state);
+				REQUIRE(tile2.state == tile22.state);
 			}
 		}
 	}
@@ -41,7 +42,8 @@ SCENARIO("Access grid", "[Grid]") {
 
 		WHEN("neighbors are requested for tile (1,1)") {
 			auto tile = grid.getTile(1, 1);
-			grid.setTileState(tile.x, tile.y, State::Flag);
+			tile.state = State::Flag;
+			grid.setTile(tile);
 			auto adjacent = grid.getAdjacent(tile);
 
 			THEN("return all tiles except center") {
@@ -54,7 +56,8 @@ SCENARIO("Access grid", "[Grid]") {
 
 		WHEN("neighbors are requested for tile (0,0)") {
 			auto tile = grid.getTile(0, 0);
-			grid.setTileState(tile.x, tile.y, State::Flag);
+			tile.state = State::Flag;
+			grid.setTile(tile);
 			auto adjacent = grid.getAdjacent(tile);
 
 			THEN("return all 3 adjacent tiles") {
