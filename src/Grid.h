@@ -12,7 +12,7 @@ namespace helmesjo {
 		Tile getTile(unsigned int x, unsigned int y) const;
 		void setTileState(unsigned int x, unsigned int y, Tile::State state);
 
-		std::vector<Tile> getAdjacent(unsigned int x, unsigned int y) const;
+		std::vector<Tile> getAdjacent(Tile tile) const;
 
 	private:
 		bool isInRange(int x, int y) const;

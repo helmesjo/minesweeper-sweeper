@@ -39,9 +39,10 @@ SCENARIO("Access grid", "[Grid]") {
 	GIVEN("a 3x3 grid with all unknown") {
 		auto grid = Grid(3, 3);
 
-		WHEN("neighbors are requested for center tile") {
-			grid.setTileState(1, 1, State::Flag);
-			auto adjacent = grid.getAdjacent(1, 1);
+		WHEN("neighbors are requested for tile (1,1)") {
+			auto tile = grid.getTile(1, 1);
+			grid.setTileState(tile.x, tile.y, State::Flag);
+			auto adjacent = grid.getAdjacent(tile);
 
 			THEN("return all tiles except center") {
 
@@ -51,9 +52,10 @@ SCENARIO("Access grid", "[Grid]") {
 			}
 		}
 
-		WHEN("neighbors are requested for corner tile") {
-			grid.setTileState(0, 0, State::Flag);
-			auto adjacent = grid.getAdjacent(0, 0);
+		WHEN("neighbors are requested for tile (0,0)") {
+			auto tile = grid.getTile(0, 0);
+			grid.setTileState(tile.x, tile.y, State::Flag);
+			auto adjacent = grid.getAdjacent(tile);
 
 			THEN("return all 3 adjacent tiles") {
 				REQUIRE(adjacent.size() == 3);

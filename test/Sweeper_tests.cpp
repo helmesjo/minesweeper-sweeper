@@ -10,14 +10,16 @@ using State = Tile::State;
 
 SCENARIO("Solving grid", "[Sweeper]") {
 	auto sweeper = Sweeper();
-
-	GIVEN("a 3x3 grid with all unknown") {
+	GIVEN("a 3x3 grid") {
 		auto grid = Grid(3, 3, Tile::State::Unknown);
 
-		WHEN("center tile has number 1") {
-			grid.setTileState(0, 0, State::One);
+		WHEN("tile (1, 1) is number 1") {
+			auto tile = grid.getTile(1, 1);
+			grid.setTileState(tile.x, tile.y, State::One);
+			//sweeper.calculateMineProbabilities();
 
-			THEN("associate a mine-probability with adjacent tiles") {
+			THEN("adjacent tiles should have a mine-probability of 1/8 (1/nrAdjacent)") {
+				auto adjacent = grid.getAdjacent(tile);
 				FAIL();
 				//auto hasMineProbabilityGreaterThanZero = std::all_of();
 			}

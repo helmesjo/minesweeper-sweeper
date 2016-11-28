@@ -31,12 +31,12 @@ void helmesjo::Grid::setTileState(unsigned int x, unsigned int y, Tile::State st
 	grid[index] = Tile(state, x, y);
 }
 
-std::vector<Tile> helmesjo::Grid::getAdjacent(unsigned int x, unsigned int y) const
+std::vector<Tile> helmesjo::Grid::getAdjacent(Tile tile) const
 {
 	auto adjacent = std::vector<Tile>();
 	for (auto dir : directions) {
-		int dx = x + dir.x;
-		int dy = y + dir.y;
+		int dx = tile.x + dir.x;
+		int dy = tile.y + dir.y;
 
 		if (isInRange(dx, dy)) {
 			auto tile = getTile(dx, dy);
