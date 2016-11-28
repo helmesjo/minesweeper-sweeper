@@ -50,7 +50,7 @@ void helmesjo::Grid::setTile(Tile tile)
 	grid[index] = tile;
 }
 
-Grid::TileVec helmesjo::Grid::getAdjacent(Tile tile) const
+Grid::TileVec helmesjo::Grid::getAdjacent(Tile tile, Tile::State included) const
 {
 	auto adjacent = std::vector<Tile>();
 	for (auto dir : directions) {
@@ -58,8 +58,9 @@ Grid::TileVec helmesjo::Grid::getAdjacent(Tile tile) const
 		int dy = tile.y + dir.y;
 
 		if (isInRange(dx, dy)) {
-			auto tile = getTile(dx, dy);
-			adjacent.push_back(tile);
+			auto ajdTile = getTile(dx, dy);
+			if((included & ajdTile.state) == ajdTile.state)
+				adjacent.push_back(ajdTile);
 		}
 	}
 	return adjacent;

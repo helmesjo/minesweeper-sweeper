@@ -6,9 +6,11 @@
 namespace helmesjo {
 	struct Tile {
 		enum class State : char {
-			Unknown = 0,
-			Flag,
-			Number,
+			None	= 0,
+			Unknown = 1 << 0,
+			Flag	= 1 << 1,
+			Number	= 1 << 2,
+			All		= -1
 		};
 
 		Tile() = default;
@@ -19,6 +21,14 @@ namespace helmesjo {
 		unsigned int x = 0u, y = 0u;
 		unsigned int stateValue = 0u;
 	};
+
+	inline Tile::State operator|(Tile::State a, Tile::State b) {
+		return a = static_cast<Tile::State> (static_cast<int>(a) | static_cast<int>(b));
+	}
+
+	inline Tile::State operator&(Tile::State a, Tile::State b) {
+		return a = static_cast<Tile::State> (static_cast<int>(a) & static_cast<int>(b));
+	}
 
 	std::ostream& operator << (std::ostream& os, Tile::State state);
 }

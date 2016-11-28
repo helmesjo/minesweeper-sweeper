@@ -17,7 +17,7 @@ namespace helmesjo {
 		Tile getTile(unsigned int x, unsigned int y) const;
 		void setTile(Tile tile);
 
-		std::vector<Tile> getAdjacent(Tile tile) const;
+		std::vector<Tile> getAdjacent(Tile tile, Tile::State included = Tile::State::All) const;
 
 		TileVec::const_iterator begin() const;
 		TileVec::const_iterator end() const;

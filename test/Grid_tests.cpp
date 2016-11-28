@@ -40,7 +40,7 @@ SCENARIO("Access grid", "[Grid]") {
 	GIVEN("a 3x3 grid with all unknown") {
 		auto grid = Grid(3, 3);
 
-		WHEN("neighbors are requested for tile (1,1)") {
+		WHEN("adjacent are requested for tile (1,1)") {
 			auto tile = grid.getTile(1, 1);
 			tile.state = State::Flag;
 			grid.setTile(tile);
@@ -54,7 +54,7 @@ SCENARIO("Access grid", "[Grid]") {
 			}
 		}
 
-		WHEN("neighbors are requested for tile (0,0)") {
+		WHEN("adjacent are requested for tile (0,0)") {
 			auto tile = grid.getTile(0, 0);
 			tile.state = State::Flag;
 			grid.setTile(tile);
@@ -66,6 +66,24 @@ SCENARIO("Access grid", "[Grid]") {
 					return t.x == 0u && t.y == 1u;
 				});
 				REQUIRE(hasAboveAdjacent == true);
+			}
+		}
+	}
+
+	GIVEN("a 3x3 grid with all unknown") {
+		WHEN("tile (0, 0) has state Flag") {
+			auto tile = grid.getTile(0, 0);
+			tile.state = State::Flag;
+			grid.setTile(tile);
+			AND_WHEN("adjacent with state Flag are requested for tile (1,1)") {
+				auto tile = grid.getTile(1, 1);
+				auto adjacent = grid.getAdjacent(tile, State::Flag);
+
+				THEN("return only tile (0,0)") {
+
+					REQUIRE(adjacent.size() == 1);
+					REQUIRE(adjacent[0].state == State::Flag);
+				}
 			}
 		}
 	}
