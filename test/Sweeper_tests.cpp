@@ -3,13 +3,13 @@
 
 #include "Sweeper.h"
 #include "Tile.h"
-#include "grid.h"
+#include "Grid.h"
 
 using namespace helmesjo;
 using State = Tile::State;
 
 SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
-	using TileGrid = helmesjo::grid<Tile>;
+	using TileGrid = helmesjo::Grid<Tile>;
 
 	// Probabilities
 	const auto oneSeventh = 1.0 / 7.0;
@@ -112,7 +112,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 }
 
 SCENARIO("Getting best move", "[Sweeper]") {
-	using TileGrid = helmesjo::grid<Tile>;
+	using TileGrid = helmesjo::Grid<Tile>;
 	auto grid = TileGrid(3, 3);
 	auto sweeper = Sweeper(grid);
 

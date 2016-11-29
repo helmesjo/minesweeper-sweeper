@@ -5,7 +5,7 @@
 
 using namespace helmesjo;
 
-helmesjo::Sweeper::Sweeper(const helmesjo::grid<Tile> & grid):
+helmesjo::Sweeper::Sweeper(const helmesjo::Grid<Tile> & grid):
 	grid(grid),
 	mineProbabilities(grid.width(), grid.height())
 {

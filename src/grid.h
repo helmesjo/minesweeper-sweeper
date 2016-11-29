@@ -3,26 +3,28 @@
 #include <vector>
 #include <array>
 #include <tuple>
+#include <functional>
 
 namespace helmesjo {
 	
 	template<typename T>
-	class grid {
+	class Grid {
+		using Predicate = const std::function<bool(const T&)>;
 	public:
 
-		grid(size_t width, size_t height);
+		Grid(size_t width, size_t height);
 
 		size_t width() const;
 		size_t height() const;
 		size_t size() const;
 
-		void set(size_t x, size_t y, T& obj);
+		void set(size_t x, size_t y, const T& obj);
 		decltype(auto) get(size_t x, size_t y) const;
 		decltype(auto) get(size_t x, size_t y);
 		decltype(auto) get(size_t index) const;
 		decltype(auto) get(size_t index);
-		std::vector<T> getAdjacent(size_t x, size_t y) const;
-		std::vector<T> getAdjacent(size_t index) const;
+		std::vector<T> getAdjacent(size_t x, size_t y, Predicate& predicate = nullptr) const;
+		std::vector<T> getAdjacent(size_t index, Predicate& predicate = nullptr) const;
 
 		decltype(auto) begin() const;
 		decltype(auto) end() const;
@@ -60,7 +62,7 @@ namespace helmesjo {
 	}
 
 	template<typename T>
-	inline helmesjo::grid<T>::grid(size_t width, size_t height) :
+	inline helmesjo::Grid<T>::Grid(size_t width, size_t height) :
 		_width(width),
 		_height(height),
 		elements(width * height, T())
@@ -68,53 +70,53 @@ namespace helmesjo {
 	}
 
 	template<typename T>
-	inline size_t grid<T>::width() const
+	inline size_t Grid<T>::width() const
 	{
 		return _width;
 	}
 
 	template<typename T>
-	inline size_t grid<T>::height() const
+	inline size_t Grid<T>::height() const
 	{
 		return _height;
 	}
 
 	template<typename T>
-	inline size_t grid<T>::size() const
+	inline size_t Grid<T>::size() const
 	{
 		return elements.size();
 	}
 
 	template<typename T>
-	inline void grid<T>::set(size_t x, size_t y, T & obj)
+	inline void Grid<T>::set(size_t x, size_t y, const T& obj)
 	{
 		auto index = calculate1DIndex(_width, x, y);
 		elements[index] = obj;
 	}
 	template<typename T>
-	inline decltype(auto) grid<T>::get(size_t x, size_t y) const
+	inline decltype(auto) Grid<T>::get(size_t x, size_t y) const
 	{
 		auto index = calculate1DIndex(_width, x, y);
 		return elements[index];
 	}
 	template<typename T>
-	inline decltype(auto) grid<T>::get(size_t x, size_t y)
+	inline decltype(auto) Grid<T>::get(size_t x, size_t y)
 	{
 		auto index = calculate1DIndex(_width, x, y);
 		return elements[index];
 	}
 	template<typename T>
-	inline decltype(auto) grid<T>::get(size_t index) const
+	inline decltype(auto) Grid<T>::get(size_t index) const
 	{
 		return elements[index];
 	}
 	template<typename T>
-	inline decltype(auto) grid<T>::get(size_t index)
+	inline decltype(auto) Grid<T>::get(size_t index)
 	{
 		return elements[index];
 	}
 	template<typename T>
-	inline std::vector<T> grid<T>::getAdjacent(size_t x, size_t y) const
+	inline std::vector<T> Grid<T>::getAdjacent(size_t x, size_t y, Predicate& predicate) const
 	{
 		auto adjacent = std::vector<T>();
 		for (auto dir : directions) {
@@ -128,24 +130,25 @@ namespace helmesjo {
 					//	Error: C3779: 'helmesjo::grid<helmesjo::Tile>::get': a function that returns 'decltype(auto)' cannot be used before it is defined
 					//	Apparently a bug in MSVC++
 				//if ((included & ajdElement.state) == ajdElement.state)
-				adjacent.push_back(adjElement);
+				if(predicate == nullptr || predicate(adjElement) == true)
+					adjacent.push_back(adjElement);
 			}
 		}
 		return adjacent;
 	}
 	template<typename T>
-	inline std::vector<T> grid<T>::getAdjacent(size_t index) const
+	inline std::vector<T> Grid<T>::getAdjacent(size_t index, Predicate& predicate) const
 	{
 		auto xy = calculate2DIndex(_width, _height, index);
-		return getAdjacent(std::get<0>(xy), std::get<1>(xy));
+		return getAdjacent(std::get<0>(xy), std::get<1>(xy), predicate);
 	}
 	template<typename T>
-	inline decltype(auto) grid<T>::begin() const
+	inline decltype(auto) Grid<T>::begin() const
 	{
 		return elements.cbegin();
 	}
 	template<typename T>
-	inline decltype(auto) grid<T>::end() const
+	inline decltype(auto) Grid<T>::end() const
 	{
 		return elements.cend();
 	}

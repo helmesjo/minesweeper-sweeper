@@ -1,14 +1,14 @@
-#include "grid.h"
-
 #include <catch.hpp>
+#include "Grid.h"
+
 
 using namespace helmesjo;
 
-SCENARIO("Read from grid", "[grid]") {
+SCENARIO("Read from grid<int>", "[Grid]") {
 	using Type = int;
 
 	GIVEN("a 2x2 grid") {
-		auto myGrid = grid<Type>(2, 2);
+		auto myGrid = Grid<Type>(2, 2);
 
 		WHEN("element (1,0) is requested") {
 			auto element = myGrid.get(1, 0);
@@ -30,7 +30,7 @@ SCENARIO("Read from grid", "[grid]") {
 	}
 
 	GIVEN("a 3x3 grid") {
-		auto myGrid = grid<Type>(3, 3);
+		auto myGrid = Grid<Type>(3, 3);
 
 		WHEN("adjacent elements are requested for element (1,1)") {
 			auto adjacent = myGrid.getAdjacent(1, 1);
@@ -58,10 +58,23 @@ SCENARIO("Read from grid", "[grid]") {
 				REQUIRE(adjacent.size() == 5);
 			}
 		}
+
+		WHEN("element (1,1) is set to -1") {
+			myGrid.set(1, 1, -1);
+
+			AND_WHEN("adjacent elements are requested for element (1,1) with a predicated val != -1") {
+				auto adjacent = myGrid.getAdjacent(1, 0, [](auto val) { return val != -1; });
+
+				THEN("4 adjacent elements should be returned") {
+
+					REQUIRE(adjacent.size() == 4);
+				}
+			}
+		}
 	}
 
 	GIVEN("a 3x4 grid") {
-		auto myGrid = grid<Type>(3, 4);
+		auto myGrid = Grid<Type>(3, 4);
 		WHEN("size is requested") {
 			auto size = myGrid.size();
 
@@ -89,10 +102,10 @@ SCENARIO("Read from grid", "[grid]") {
 	}
 }
 
-SCENARIO("Write to grid") {
+SCENARIO("Write to grid<int>", "[Grid]") {
 	GIVEN("a 2x2 grid") {
 		using Type = int;
-		auto grid = helmesjo::grid<Type>(2, 2);
+		auto grid = helmesjo::Grid<Type>(2, 2);
 
 		WHEN("element (0,1) is assigned a new value") {
 			unsigned int x = 0, y = 1;

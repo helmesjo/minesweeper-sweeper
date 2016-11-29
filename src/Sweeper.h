@@ -2,7 +2,7 @@
 
 #include "Tile.h"
 #include <vector>
-#include "grid.h"
+#include "Grid.h"
 
 namespace helmesjo {
 
@@ -10,7 +10,7 @@ namespace helmesjo {
 
 	class Sweeper {
 	public:
-		Sweeper(const grid<Tile>& grid);
+		Sweeper(const Grid<Tile>& grid);
 
 		//Tile findMostProbableMine();
 		void calculateMineProbabilities();
@@ -20,8 +20,8 @@ namespace helmesjo {
 		void addMineProbability(size_t index, double probability);
 		void resetProbabilities();
 
-		const grid<Tile>& grid;
-		helmesjo::grid<double> mineProbabilities;
+		const Grid<Tile>& grid;
+		helmesjo::Grid<double> mineProbabilities;
 	};
 
 }
