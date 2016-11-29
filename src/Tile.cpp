@@ -10,9 +10,9 @@ using namespace helmesjo;
 //static_assert(std::is_pod<Tile>::value, "Tile is not POD-type");
 static_assert(sizeof(Tile) <= sizeof(int)*4, "Tile needs to be small!");
 
-helmesjo::Tile::Tile(State state, unsigned int stateValue, unsigned int x, unsigned int y) :
+helmesjo::Tile::Tile(State state, unsigned int adjacentMines, unsigned int x, unsigned int y) :
 	state(state),
-	stateValue(stateValue),
+	adjacentMines(adjacentMines),
 	x(x),
 	y(y)
 {

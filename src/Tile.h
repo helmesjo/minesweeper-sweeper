@@ -14,12 +14,12 @@ namespace helmesjo {
 		};
 
 		Tile() = default;
-		Tile(State state, unsigned int stateValue, unsigned int x, unsigned int y);
+		Tile(State state, unsigned int adjacentMines, unsigned int x, unsigned int y);
 
 		State state = State::Unknown;
 		// WILL REMOVE THIS! (was just added as temp convenience)
 		unsigned int x = 0u, y = 0u;
-		unsigned int stateValue = 0u;
+		unsigned int adjacentMines = 0u;
 	};
 
 	inline Tile::State operator|(Tile::State a, Tile::State b) {

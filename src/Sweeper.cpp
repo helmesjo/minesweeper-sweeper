@@ -37,7 +37,7 @@ void helmesjo::Sweeper::calculateMineProbabilities()
 		if (tile.state == Tile::State::Number) {
 			auto adjacent = grid.getAdjacent(tile, Tile::State::Unknown);
 			if (adjacent.size() > 0) {
-				auto mineProbability = static_cast<double>(tile.stateValue) / static_cast<double>(adjacent.size());
+				auto mineProbability = static_cast<double>(tile.adjacentMines) / static_cast<double>(adjacent.size());
 				for (auto& adj : adjacent)
 					addMineProbability(adj, mineProbability);
 			}

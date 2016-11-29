@@ -26,7 +26,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 			tile11.state = State::Number;
 
 			AND_WHEN("it has 1 adjacent mine") {
-				tile11.stateValue = 1;
+				tile11.adjacentMines = 1;
 				grid.setTile(tile11);
 				THEN("adjacent tiles should have a mine-probability of 1/7 (1/nrAdjacent, non-unknown are ignored)") {
 					sweeper.calculateMineProbabilities();
@@ -41,7 +41,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 			}
 
 			AND_WHEN("it has 4 adjacent mines") {
-				tile11.stateValue = 4;
+				tile11.adjacentMines = 4;
 				grid.setTile(tile11);
 				THEN("adjacent tiles should have a mine-probability of 4/7 (4/nrAdjacent, non-unknown are ignored)") {
 					sweeper.calculateMineProbabilities();
