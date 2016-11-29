@@ -6,13 +6,9 @@
 
 using namespace helmesjo;
 
-static int rowBasedIndex(unsigned int width, unsigned int x, unsigned int y) {
-	return width * y + x;
-}
-
 helmesjo::Sweeper::Sweeper(const TileGrid & grid):
 	grid(grid),
-	mineProbabilities(grid.getWidth() * grid.getHeight(), 0.0)
+	mineProbabilities(grid.getWidth(), grid.getHeight())
 {
 	if (grid.size() == 0)
 		throw std::exception("Can't work with an empty grid");
@@ -53,13 +49,13 @@ double helmesjo::Sweeper::getMineProbability(Tile tile) const
 double helmesjo::Sweeper::getMineProbability(unsigned int x, unsigned int y) const
 {
 	auto index = rowBasedIndex(grid.getWidth(), x, y);
-	return mineProbabilities[index];
+	return mineProbabilities.get(x, y);
 }
 
 void helmesjo::Sweeper::addMineProbability(Tile tile, double probability)
 {
 	auto index = rowBasedIndex(grid.getWidth(), tile.x, tile.y);
-	mineProbabilities[index] += probability;
+	mineProbabilities.get(tile.x, tile.y) += probability;
 }
 
 void helmesjo::Sweeper::resetProbabilities()

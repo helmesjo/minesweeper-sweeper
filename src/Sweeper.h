@@ -2,6 +2,7 @@
 
 #include "Tile.h"
 #include <vector>
+#include "grid.h"
 
 namespace helmesjo {
 
@@ -21,7 +22,7 @@ namespace helmesjo {
 		void resetProbabilities();
 
 		const TileGrid& grid;
-		std::vector<double> mineProbabilities;
+		helmesjo::grid<double> mineProbabilities;
 	};
 
 }

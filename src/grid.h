@@ -13,6 +13,7 @@ namespace helmesjo {
 
 		void set(size_t x, size_t y, T& obj);
 		decltype(auto) get(size_t x, size_t y) const;
+		decltype(auto) get(size_t x, size_t y);
 		std::vector<T> getAdjacent(size_t x, size_t y) const;
 
 		decltype(auto) begin() const;
@@ -60,6 +61,12 @@ namespace helmesjo {
 	}
 	template<typename T>
 	inline decltype(auto) helmesjo::grid<T>::get(size_t x, size_t y) const
+	{
+		auto index = rowBasedIndex(width, x, y);
+		return elements[index];
+	}
+	template<typename T>
+	inline decltype(auto) grid<T>::get(size_t x, size_t y)
 	{
 		auto index = rowBasedIndex(width, x, y);
 		return elements[index];
