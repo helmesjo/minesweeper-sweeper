@@ -3,20 +3,10 @@
 
 using namespace helmesjo;
 
-struct direction {
-	char x;
-	char y;
-};
-const std::array<direction, 8> directions = {{{-1,-1} , {-1,0} , {-1,1} , {0,-1} , {0,1} , {1,-1} , {1,0} , {1,1}}};
-
-static int rowBasedIndex(unsigned int width, unsigned int x, unsigned int y) {
-	return width * y + x;
-}
-
 helmesjo::TileGrid::TileGrid(unsigned int nrColumns, unsigned int nrRows, Tile::State defaultState):
 	width(nrColumns),
 	height(nrRows),
-	grid(nrColumns *nrRows)
+	grid(nrColumns, nrRows)
 {
 	for (auto x = 0u; x < nrColumns; x++)
 		for (auto y = 0u; y < nrRows; y++)
@@ -40,42 +30,22 @@ unsigned int helmesjo::TileGrid::size() const
 
 Tile helmesjo::TileGrid::getTile(unsigned int x, unsigned int y) const
 {
-	auto index = rowBasedIndex(width, x, y);
-	return grid[index];
+	return grid.get(x, y);
 }
 
 void helmesjo::TileGrid::setTile(Tile tile)
 {
-	auto index = rowBasedIndex(width, tile.x, tile.y);
-	grid[index] = tile;
+	grid.get(tile.x, tile.y) = tile;
 }
 
-TileGrid::TileVec helmesjo::TileGrid::getAdjacent(Tile tile, Tile::State included) const
+std::vector<Tile> helmesjo::TileGrid::getAdjacent(Tile tile, Tile::State included) const
 {
-	auto adjacent = std::vector<Tile>();
-	for (auto dir : directions) {
-		int dx = tile.x + dir.x;
-		int dy = tile.y + dir.y;
+	auto adjacent = grid.getAdjacent(tile.x, tile.y);
 
-		if (isInRange(dx, dy)) {
-			auto ajdTile = getTile(dx, dy);
-			if((included & ajdTile.state) == ajdTile.state)
-				adjacent.push_back(ajdTile);
-		}
-	}
-	return adjacent;
-}
+	auto filtered = std::vector<Tile>();
+	for (auto adj : adjacent)
+		if ((included & adj.state) == adj.state)
+			filtered.push_back(adj);
 
-TileGrid::TileVec::const_iterator helmesjo::TileGrid::begin() const
-{
-	return grid.cbegin();
-}
-
-TileGrid::TileVec::const_iterator helmesjo::TileGrid::end() const
-{
-	return grid.cend();
-}
-
-bool helmesjo::TileGrid::isInRange(int x, int y) const {
-	return x >= 0 && x < static_cast<int>(width) && y >= 0 && y < static_cast<int>(height);
+	return filtered;
 }

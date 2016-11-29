@@ -11,6 +11,8 @@ namespace helmesjo {
 
 		grid(size_t width, size_t height);
 
+		size_t size() const;
+
 		void set(size_t x, size_t y, T& obj);
 		decltype(auto) get(size_t x, size_t y) const;
 		decltype(auto) get(size_t x, size_t y);
@@ -51,6 +53,12 @@ namespace helmesjo {
 		height(height),
 		elements(width * height, T())
 	{
+	}
+
+	template<typename T>
+	inline size_t grid<T>::size() const
+	{
+		return elements.size();
 	}
 
 	template<typename T>

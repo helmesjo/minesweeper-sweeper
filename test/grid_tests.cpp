@@ -4,7 +4,7 @@
 
 using namespace helmesjo;
 
-SCENARIO("Access elements", "[grid]") {
+SCENARIO("Read from grid", "[grid]") {
 	using Type = int;
 
 	GIVEN("a 2x2 grid") {
@@ -48,10 +48,19 @@ SCENARIO("Access elements", "[grid]") {
 				REQUIRE(adjacent.size() == 5);
 			}
 		}
+
+		WHEN("size is requested"){
+			auto size = myGrid.size();
+			
+			THEN("it should be 9") {
+
+				REQUIRE(size == 9);
+			}
+		}
 	}
 }
 
-SCENARIO("Modify grid") {
+SCENARIO("Write to grid") {
 	GIVEN("a 2x2 grid") {
 		using Type = int;
 		auto grid = helmesjo::grid<Type>(2, 2);

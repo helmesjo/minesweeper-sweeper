@@ -1,12 +1,11 @@
 #pragma once
 
 #include "Tile.h"
-#include <vector>
+#include "grid.h"
 
 namespace helmesjo {
 
 	class TileGrid {
-		using TileVec = std::vector<Tile>;
 	public:
 		TileGrid(unsigned int nrColumns, unsigned int nrRows, Tile::State defaultState = Tile::State::Unknown);
 
@@ -19,16 +18,25 @@ namespace helmesjo {
 
 		std::vector<Tile> getAdjacent(Tile tile, Tile::State included = Tile::State::All) const;
 
-		TileVec::const_iterator begin() const;
-		TileVec::const_iterator end() const;
+		decltype(auto) begin() const;
+		decltype(auto) end() const;
 
 	private:
-		bool isInRange(int x, int y) const;
 
 		const unsigned int width = 0;
 		const unsigned int height = 0;
 		// Row-order indexed
-		TileVec grid;
+		helmesjo::grid<Tile> grid;
 	};
+
+
+	inline decltype(auto) helmesjo::TileGrid::begin() const
+	{
+		return grid.begin();
+	}
+	inline decltype(auto) helmesjo::TileGrid::end() const
+	{
+		return grid.end();
+	}
 
 }
