@@ -1,16 +1,16 @@
+#include "TileGrid.h"
+
 #include <catch.hpp>
 #include <algorithm>
-
-#include "Grid.h"
 
 using namespace helmesjo;
 using State = Tile::State;
 
 SCENARIO("Manipulate grid", "[Grid]") {
-	auto grid = Grid(3, 3);
+	auto grid = TileGrid(3, 3);
 
 	GIVEN("a 3x3 grid with all unknown") {
-		auto grid = Grid(3, 3);
+		auto grid = TileGrid(3, 3);
 
 		WHEN("tile is returned for index (2, 2)") {
 			auto tile22 = grid.getTile(2, 2);
@@ -35,10 +35,10 @@ SCENARIO("Manipulate grid", "[Grid]") {
 }
 
 SCENARIO("Access grid", "[Grid]") {
-	auto grid = Grid(3, 3);
+	auto grid = TileGrid(3, 3);
 
 	GIVEN("a 3x3 grid with all unknown") {
-		auto grid = Grid(3, 3);
+		auto grid = TileGrid(3, 3);
 
 		WHEN("adjacent are requested for tile (1,1)") {
 			auto tile = grid.getTile(1, 1);

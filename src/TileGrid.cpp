@@ -1,4 +1,4 @@
-#include "Grid.h"
+#include "TileGrid.h"
 #include <array>
 
 using namespace helmesjo;
@@ -13,7 +13,7 @@ static int rowBasedIndex(unsigned int width, unsigned int x, unsigned int y) {
 	return width * y + x;
 }
 
-helmesjo::Grid::Grid(unsigned int nrColumns, unsigned int nrRows, Tile::State defaultState):
+helmesjo::TileGrid::TileGrid(unsigned int nrColumns, unsigned int nrRows, Tile::State defaultState):
 	width(nrColumns),
 	height(nrRows),
 	grid(nrColumns *nrRows)
@@ -23,34 +23,34 @@ helmesjo::Grid::Grid(unsigned int nrColumns, unsigned int nrRows, Tile::State de
 			setTile(Tile(defaultState, 0u, x, y));
 }
 
-unsigned int helmesjo::Grid::getWidth() const
+unsigned int helmesjo::TileGrid::getWidth() const
 {
 	return width;
 }
 
-unsigned int helmesjo::Grid::getHeight() const
+unsigned int helmesjo::TileGrid::getHeight() const
 {
 	return height;
 }
 
-unsigned int helmesjo::Grid::size() const
+unsigned int helmesjo::TileGrid::size() const
 {
 	return grid.size();
 }
 
-Tile helmesjo::Grid::getTile(unsigned int x, unsigned int y) const
+Tile helmesjo::TileGrid::getTile(unsigned int x, unsigned int y) const
 {
 	auto index = rowBasedIndex(width, x, y);
 	return grid[index];
 }
 
-void helmesjo::Grid::setTile(Tile tile)
+void helmesjo::TileGrid::setTile(Tile tile)
 {
 	auto index = rowBasedIndex(width, tile.x, tile.y);
 	grid[index] = tile;
 }
 
-Grid::TileVec helmesjo::Grid::getAdjacent(Tile tile, Tile::State included) const
+TileGrid::TileVec helmesjo::TileGrid::getAdjacent(Tile tile, Tile::State included) const
 {
 	auto adjacent = std::vector<Tile>();
 	for (auto dir : directions) {
@@ -66,16 +66,16 @@ Grid::TileVec helmesjo::Grid::getAdjacent(Tile tile, Tile::State included) const
 	return adjacent;
 }
 
-Grid::TileVec::const_iterator helmesjo::Grid::begin() const
+TileGrid::TileVec::const_iterator helmesjo::TileGrid::begin() const
 {
 	return grid.cbegin();
 }
 
-Grid::TileVec::const_iterator helmesjo::Grid::end() const
+TileGrid::TileVec::const_iterator helmesjo::TileGrid::end() const
 {
 	return grid.cend();
 }
 
-bool helmesjo::Grid::isInRange(int x, int y) const {
+bool helmesjo::TileGrid::isInRange(int x, int y) const {
 	return x >= 0 && x < static_cast<int>(width) && y >= 0 && y < static_cast<int>(height);
 }

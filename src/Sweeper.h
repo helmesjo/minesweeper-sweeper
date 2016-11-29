@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Grid.h"
+#include "Tile.h"
 #include <vector>
 
 namespace helmesjo {
 
-	class Grid;
+	class TileGrid;
 
 	class Sweeper {
 	public:
-		Sweeper(const Grid& grid);
+		Sweeper(const TileGrid& grid);
 
 		//Tile findMostProbableMine();
 		void calculateMineProbabilities();
@@ -20,7 +20,7 @@ namespace helmesjo {
 		void addMineProbability(Tile tile, double probability);
 		void resetProbabilities();
 
-		const Grid& grid;
+		const TileGrid& grid;
 		std::vector<double> mineProbabilities;
 	};
 

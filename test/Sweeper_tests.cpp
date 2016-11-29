@@ -2,7 +2,7 @@
 #include <algorithm>
 
 #include "Sweeper.h"
-#include "Grid.h"
+#include "TileGrid.h"
 #include "Tile.h"
 
 using namespace helmesjo;
@@ -16,7 +16,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 	const auto oneFifth = 1.0 / 5.0;
 
 	GIVEN("a 3x3 grid") {
-		auto grid = Grid(3, 3, Tile::State::Unknown);
+		auto grid = TileGrid(3, 3, Tile::State::Unknown);
 		auto sweeper = Sweeper(grid);
 
 		WHEN("tile (1, 1) is a number and got 1 adjacent mine") {
@@ -91,7 +91,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 	}
 
 	GIVEN("a 3x3 grid") {
-		auto grid = Grid(3, 3, Tile::State::Unknown);
+		auto grid = TileGrid(3, 3, Tile::State::Unknown);
 		auto sweeper = Sweeper(grid);
 
 		WHEN("tile (1, 2) and (1,0) are a numbers with 1 adjacent mine each") {
@@ -110,7 +110,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 }
 
 SCENARIO("Getting best move", "[Sweeper]") {
-	auto grid = Grid(3, 3, Tile::State::Unknown);
+	auto grid = TileGrid(3, 3, Tile::State::Unknown);
 	auto sweeper = Sweeper(grid);
 
 	//GIVEN("a 2x1 grid with all unknown") {

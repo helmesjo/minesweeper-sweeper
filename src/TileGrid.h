@@ -5,10 +5,10 @@
 
 namespace helmesjo {
 
-	class Grid {
+	class TileGrid {
 		using TileVec = std::vector<Tile>;
 	public:
-		Grid(unsigned int nrColumns, unsigned int nrRows, Tile::State defaultState = Tile::State::Unknown);
+		TileGrid(unsigned int nrColumns, unsigned int nrRows, Tile::State defaultState = Tile::State::Unknown);
 
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;

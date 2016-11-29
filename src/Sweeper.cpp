@@ -1,5 +1,5 @@
 #include "Sweeper.h"
-#include "Grid.h"
+#include "TileGrid.h"
 #include <algorithm>
 #include <tuple>
 #include <stdexcept>
@@ -10,7 +10,7 @@ static int rowBasedIndex(unsigned int width, unsigned int x, unsigned int y) {
 	return width * y + x;
 }
 
-helmesjo::Sweeper::Sweeper(const Grid & grid):
+helmesjo::Sweeper::Sweeper(const TileGrid & grid):
 	grid(grid),
 	mineProbabilities(grid.getWidth() * grid.getHeight(), 0.0)
 {
