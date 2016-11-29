@@ -2,13 +2,15 @@
 #include <algorithm>
 
 #include "Sweeper.h"
-#include "TileGrid.h"
 #include "Tile.h"
+#include "grid.h"
 
 using namespace helmesjo;
 using State = Tile::State;
 
 SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
+	using TileGrid = helmesjo::grid<Tile>;
+
 	// Probabilities
 	const auto oneSeventh = 1.0 / 7.0;
 	const auto oneEighth = 1.0 / 8.0;
@@ -16,11 +18,11 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 	const auto oneFifth = 1.0 / 5.0;
 
 	GIVEN("a 3x3 grid") {
-		auto grid = TileGrid(3, 3, Tile::State::Unknown);
+		auto grid = TileGrid(3, 3);
 		auto sweeper = Sweeper(grid);
 
 		WHEN("tile (1, 1) is a number and got 1 adjacent mine") {
-			grid.setTile(Tile(State::Number, 1u, 1, 1));
+			grid.get(1,1) = Tile(State::Number, 1u, 1, 1);
 
 			THEN("adjacent tiles should have a mine-probability of 1/8 (1/nrAdjacent)") {
 				sweeper.calculateMineProbabilities();
@@ -44,7 +46,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 			}
 
 			AND_WHEN("tile (1,2) is a flag") {
-				grid.setTile(Tile(State::Flag, 0u, 1, 2));
+				grid.get(1,2) = Tile(State::Flag, 0u, 1, 2);
 
 				THEN("adjacent tiles should have a mine-probability of 1/7 (1/nrAdjacent, non-unknown are ignored)") {
 					sweeper.calculateMineProbabilities();
@@ -67,7 +69,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 			}
 		}
 		WHEN("tile (1, 1) is a number and got 4 adjacent mine") {
-			grid.setTile(Tile(State::Number, 4, 1, 1));
+			grid.get(1,1) = Tile(State::Number, 4, 1, 1);
 
 			THEN("adjacent tiles should have a mine-probability of 4/7 (4/nrAdjacent, non-unknown are ignored)") {
 				sweeper.calculateMineProbabilities();
@@ -91,12 +93,12 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 	}
 
 	GIVEN("a 3x3 grid") {
-		auto grid = TileGrid(3, 3, Tile::State::Unknown);
+		auto grid = TileGrid(3, 3);
 		auto sweeper = Sweeper(grid);
 
 		WHEN("tile (1, 2) and (1,0) are a numbers with 1 adjacent mine each") {
-			grid.setTile(Tile(State::Number, 1, 1, 2));
-			grid.setTile(Tile(State::Number, 1, 1, 0));
+			grid.get(1,2) = (Tile(State::Number, 1, 1, 2));
+			grid.get(1,0) = (Tile(State::Number, 1, 1, 0));
 
 			THEN("tile (1,1) should have the summed up mine-probability of 1/5 + 1/5") {
 				sweeper.calculateMineProbabilities();
@@ -110,7 +112,8 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 }
 
 SCENARIO("Getting best move", "[Sweeper]") {
-	auto grid = TileGrid(3, 3, Tile::State::Unknown);
+	using TileGrid = helmesjo::grid<Tile>;
+	auto grid = TileGrid(3, 3);
 	auto sweeper = Sweeper(grid);
 
 	//GIVEN("a 2x1 grid with all unknown") {

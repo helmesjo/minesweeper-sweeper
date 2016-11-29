@@ -18,7 +18,17 @@ SCENARIO("Read from grid", "[grid]") {
 				REQUIRE(element == Type());
 			}
 		}
+
+		WHEN("element (3) is requested") {
+			auto element = myGrid.get(3);
+
+			THEN("return elemented (1, 0) (element number three)") {
+
+				REQUIRE(element == Type());
+			}
+		}
 	}
+
 	GIVEN("a 3x3 grid") {
 		auto myGrid = grid<Type>(3, 3);
 
@@ -48,13 +58,32 @@ SCENARIO("Read from grid", "[grid]") {
 				REQUIRE(adjacent.size() == 5);
 			}
 		}
+	}
 
-		WHEN("size is requested"){
+	GIVEN("a 3x4 grid") {
+		auto myGrid = grid<Type>(3, 4);
+		WHEN("size is requested") {
 			auto size = myGrid.size();
-			
-			THEN("it should be 9") {
 
-				REQUIRE(size == 9);
+			THEN("it should be 12") {
+
+				REQUIRE(size == 12);
+			}
+		}
+		WHEN("width is requested") {
+			auto width = myGrid.width();
+
+			THEN("it should be 3") {
+
+				REQUIRE(width == 3);
+			}
+		}
+		WHEN("height is requested") {
+			auto height = myGrid.height();
+
+			THEN("it should be 4") {
+
+				REQUIRE(height == 4);
 			}
 		}
 	}

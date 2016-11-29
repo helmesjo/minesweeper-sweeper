@@ -11,9 +11,7 @@ static_assert(sizeof(Tile) <= sizeof(int)*4, "Tile needs to be small!");
 
 helmesjo::Tile::Tile(State state, unsigned int adjacentMines, unsigned int x, unsigned int y) :
 	state(state),
-	adjacentMines(adjacentMines),
-	x(x),
-	y(y)
+	adjacentMines(adjacentMines)
 {
 }
 

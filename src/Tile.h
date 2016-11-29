@@ -18,7 +18,7 @@ namespace helmesjo {
 
 		State state = State::Unknown;
 		// WILL REMOVE THIS! (was just added as temp convenience)
-		unsigned int x = 0u, y = 0u;
+		//unsigned int x = 0u, y = 0u;
 		unsigned int adjacentMines = 0u;
 	};
 

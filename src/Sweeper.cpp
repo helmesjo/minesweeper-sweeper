@@ -1,14 +1,13 @@
 #include "Sweeper.h"
-#include "TileGrid.h"
 #include <algorithm>
 #include <tuple>
 #include <stdexcept>
 
 using namespace helmesjo;
 
-helmesjo::Sweeper::Sweeper(const TileGrid & grid):
+helmesjo::Sweeper::Sweeper(const helmesjo::grid<Tile> & grid):
 	grid(grid),
-	mineProbabilities(grid.getWidth(), grid.getHeight())
+	mineProbabilities(grid.width(), grid.height())
 {
 	if (grid.size() == 0)
 		throw std::exception("Can't work with an empty grid");
@@ -29,33 +28,34 @@ void helmesjo::Sweeper::calculateMineProbabilities()
 {
 	resetProbabilities();
 
-	for (auto& tile : grid) {
+	for (auto i = 0u; i < grid.size(); i++) {
+		auto tile = grid.get(i);
 		if (tile.state == Tile::State::Number) {
-			auto adjacent = grid.getAdjacent(tile, Tile::State::Unknown);
-			if (adjacent.size() > 0) {
-				auto mineProbability = static_cast<double>(tile.adjacentMines) / static_cast<double>(adjacent.size());
-				for (auto& adj : adjacent)
-					addMineProbability(adj, mineProbability);
+			//auto adjacent = grid.getAdjacent(tile, Tile::State::Unknown);
+			auto adjacent = grid.getAdjacent(i);
+			auto count = std::count_if(adjacent.begin(), adjacent.end(), [](auto el) { 
+				auto val = el.state == Tile::State::Unknown; 
+				return val;
+			});
+			if (count) {
+				auto mineProbability = static_cast<double>(tile.adjacentMines) / static_cast<double>(count);
+				for (auto i = 0u; i < grid.size(); i++) {
+					if (grid.get(i).state == Tile::State::Unknown)
+						addMineProbability(i, mineProbability);
+				}
 			}
 		}
 	}
 }
 
-double helmesjo::Sweeper::getMineProbability(Tile tile) const
-{
-	return getMineProbability(tile.x, tile.y);
-}
-
 double helmesjo::Sweeper::getMineProbability(unsigned int x, unsigned int y) const
 {
-	auto index = rowBasedIndex(grid.getWidth(), x, y);
 	return mineProbabilities.get(x, y);
 }
 
-void helmesjo::Sweeper::addMineProbability(Tile tile, double probability)
+void helmesjo::Sweeper::addMineProbability(size_t index, double probability)
 {
-	auto index = rowBasedIndex(grid.getWidth(), tile.x, tile.y);
-	mineProbabilities.get(tile.x, tile.y) += probability;
+	mineProbabilities.get(index) += probability;
 }
 
 void helmesjo::Sweeper::resetProbabilities()
