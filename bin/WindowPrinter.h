@@ -11,7 +11,7 @@ public:
 	WindowPrinter(HWND windowHandle);
 
 	std::shared_ptr<ATL::CImage> PrintWindow();
-	void PrintAndSaveToFile(std::string filePath);
+	void PrintAndSaveToFile(const std::string& filePath);
 
 private:
 	HWND windowHandle;

@@ -25,7 +25,7 @@ std::shared_ptr<CImage> WindowPrinter::PrintWindow()
 	return print;
 }
 
-void WindowPrinter::PrintAndSaveToFile(std::string filePath)
+void WindowPrinter::PrintAndSaveToFile(const std::string& filePath)
 {
 	auto print = PrintWindow();
 	print->Save(filePath.c_str());
