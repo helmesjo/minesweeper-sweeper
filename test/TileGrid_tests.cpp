@@ -6,7 +6,7 @@
 using namespace helmesjo;
 using State = Tile::State;
 
-SCENARIO("Manipulate grid", "[Grid]") {
+SCENARIO("Manipulate grid", "[TileGrid]") {
 	auto grid = TileGrid(3, 3);
 
 	GIVEN("a 3x3 grid with all unknown") {
@@ -34,7 +34,7 @@ SCENARIO("Manipulate grid", "[Grid]") {
 	}
 }
 
-SCENARIO("Access grid", "[Grid]") {
+SCENARIO("Access grid", "[TileGrid]") {
 	auto grid = TileGrid(3, 3);
 
 	GIVEN("a 3x3 grid with all unknown") {
