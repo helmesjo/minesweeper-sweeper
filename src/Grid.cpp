@@ -20,7 +20,7 @@ helmesjo::Grid::Grid(unsigned int nrColumns, unsigned int nrRows, Tile::State de
 {
 	for (auto x = 0u; x < nrColumns; x++)
 		for (auto y = 0u; y < nrRows; y++)
-			setTile(Tile(defaultState, x, y));
+			setTile(Tile(defaultState, 0u, x, y));
 }
 
 unsigned int helmesjo::Grid::getWidth() const
