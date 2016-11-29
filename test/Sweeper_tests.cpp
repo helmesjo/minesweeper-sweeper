@@ -63,7 +63,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 		WHEN("tile (1, 2) and (1,0) are a numbers with 1 adjacent mine each") {
 			grid.setTile(Tile(State::Number, 1, 1, 2));
 			grid.setTile(Tile(State::Number, 1, 1, 0));
-			THEN("tile (1,1) should have the combined mine-probability of 1/5 + 1/5") {
+			THEN("tile (1,1) should have the summed up mine-probability of 1/5 + 1/5") {
 				sweeper.calculateMineProbabilities();
 				auto tile11 = grid.getTile(1, 1);
 				auto mineProbability = sweeper.getMineProbability(tile11);
