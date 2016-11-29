@@ -47,7 +47,12 @@ void helmesjo::Sweeper::calculateMineProbabilities()
 
 double helmesjo::Sweeper::getMineProbability(Tile tile) const
 {
-	auto index = rowBasedIndex(grid.getWidth(), tile.x, tile.y);
+	return getMineProbability(tile.x, tile.y);
+}
+
+double helmesjo::Sweeper::getMineProbability(unsigned int x, unsigned int y) const
+{
+	auto index = rowBasedIndex(grid.getWidth(), x, y);
 	return mineProbabilities[index];
 }
 

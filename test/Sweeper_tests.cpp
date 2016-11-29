@@ -30,13 +30,21 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 				grid.setTile(tile11);
 				THEN("adjacent tiles should have a mine-probability of 1/7 (1/nrAdjacent, non-unknown are ignored)") {
 					sweeper.calculateMineProbabilities();
-					auto adjacent = grid.getAdjacent(tile11, State::Unknown);
+					auto tile00Prob = sweeper.getMineProbability(0, 0);
+					auto tile10Prob = sweeper.getMineProbability(1, 0);
+					auto tile20Prob = sweeper.getMineProbability(2, 0);
+					auto tile01Prob = sweeper.getMineProbability(0, 1);
+					auto tile21Prob = sweeper.getMineProbability(2, 1);
+					auto tile02Prob = sweeper.getMineProbability(0, 2);
+					auto tile22Prob = sweeper.getMineProbability(2, 2);
 
-					for (auto& tile : adjacent)
-					{
-						auto mineProbability = sweeper.getMineProbability(tile);
-						REQUIRE(mineProbability == oneSeventh);
-					}
+					REQUIRE(tile00Prob == oneSeventh);
+					REQUIRE(tile10Prob == oneSeventh);
+					REQUIRE(tile20Prob == oneSeventh);
+					REQUIRE(tile01Prob == oneSeventh);
+					REQUIRE(tile21Prob == oneSeventh);
+					REQUIRE(tile02Prob == oneSeventh);
+					REQUIRE(tile22Prob == oneSeventh);
 				}
 			}
 

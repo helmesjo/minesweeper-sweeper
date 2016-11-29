@@ -14,6 +14,7 @@ namespace helmesjo {
 		//Tile findMostProbableMine();
 		void calculateMineProbabilities();
 		double getMineProbability(Tile tile) const;
+		double getMineProbability(unsigned int x, unsigned int y) const;
 
 	private:
 		void addMineProbability(Tile tile, double probability);
