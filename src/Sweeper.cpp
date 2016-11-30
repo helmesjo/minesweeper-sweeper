@@ -4,16 +4,10 @@
 
 using namespace helmesjo;
 
-helmesjo::Sweeper::Sweeper(Grid<Tile>& grid):
-	grid(grid)
-{
-	if (grid.size() == 0)
-		throw std::exception("Can't work with an empty grid");
-}
-
 Tile helmesjo::Sweeper::findLeastProbableMine(Grid<Tile>& grid)
 {
-	calculateMineProbabilities();
+	// Should return value here instead
+	calculateMineProbabilities(grid);
 	
 	auto min = std::min_element(grid.begin(), grid.end(), [](auto x, auto y) { return x.mineProbability < y.mineProbability; });
 
@@ -21,10 +15,10 @@ Tile helmesjo::Sweeper::findLeastProbableMine(Grid<Tile>& grid)
 }
 
 // Return pair with least- and most probable mines (xy-indeces)
-void helmesjo::Sweeper::calculateMineProbabilities()
+void helmesjo::Sweeper::calculateMineProbabilities(Grid<Tile>& grid)
 {
 	// Reset probabilities
-	resetProbabilities();
+	resetProbabilities(grid);
 
 	for (auto i = 0u; i < grid.size(); i++) {
 		auto tile = grid.get(i);
@@ -44,12 +38,12 @@ void helmesjo::Sweeper::calculateMineProbabilities()
 	}
 }
 
-double helmesjo::Sweeper::getMineProbability(size_t x, size_t y) const
+double helmesjo::Sweeper::getMineProbability(size_t x, size_t y, const Grid<Tile>& grid) const
 {
 	return grid.get(x, y).mineProbability;
 }
 
-void helmesjo::Sweeper::resetProbabilities()
+void helmesjo::Sweeper::resetProbabilities(Grid<Tile>& grid)
 {
 	for (auto& tile : grid)
 		tile.mineProbability = 0.0; 
