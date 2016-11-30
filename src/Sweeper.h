@@ -6,8 +6,6 @@
 
 namespace helmesjo {
 
-	class TileGrid;
-
 	class Sweeper {
 	public:
 		Tile findLeastProbableMine(Grid<Tile>& grid);
