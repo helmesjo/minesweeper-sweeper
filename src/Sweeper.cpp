@@ -11,17 +11,16 @@ helmesjo::Sweeper::Sweeper(Grid<Tile>& grid):
 		throw std::exception("Can't work with an empty grid");
 }
 
-//Tile helmesjo::Sweeper::findMostProbableMine()
-//{
-//	calculateMineProbabilities();
-//	
-//	auto min = std::min_element(mineProbabilities.cbegin(), mineProbabilities.cend());
-//	
-//
-//
-//	return ;
-//}
+Tile helmesjo::Sweeper::findLeastProbableMine(Grid<Tile>& grid)
+{
+	calculateMineProbabilities();
+	
+	auto min = std::min_element(grid.begin(), grid.end(), [](auto x, auto y) { return x.mineProbability < y.mineProbability; });
 
+	return *min;
+}
+
+// Return pair with least- and most probable mines (xy-indeces)
 void helmesjo::Sweeper::calculateMineProbabilities()
 {
 	// Reset probabilities

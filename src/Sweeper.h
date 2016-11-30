@@ -12,7 +12,7 @@ namespace helmesjo {
 	public:
 		Sweeper(Grid<Tile>& grid);
 
-		//Tile findMostProbableMine();
+		Tile findLeastProbableMine(Grid<Tile>& grid);
 		void calculateMineProbabilities();
 		double getMineProbability(size_t x, size_t y) const;
 

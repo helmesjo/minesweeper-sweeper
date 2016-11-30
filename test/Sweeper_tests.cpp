@@ -114,23 +114,20 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 SCENARIO("Getting best move", "[Sweeper]") {
 	using TileGrid = helmesjo::Grid<Tile>;
 
-	//GIVEN("a 2x1 grid with all unknown") {
-	//	auto grid = TileGrid(3, 3);
-	//	auto sweeper = Sweeper(grid);
-	//
-	//	WHEN("tile (0, 0) is a number with 1 adjacent mine") {
-	//		grid.get(0, 0) = {State::Number, 1};
-	//
-	//		THEN("suggest tile (1, 0) is marked with flag (it's a bomb)") {
-	//			auto nextMove = sweeper.findNextMove(grid);
-	//			
-	//			auto suggestedTile = nextMove.tile;
-	//			auto suggestedColumn = nextMove.tile.x;
-	//			REQUIRE(suggestedTile.state == State::Flag);
-	//			REQUIRE(suggestedColumn == 0);
-	//		}
-	//	}
-	//}
+	GIVEN("a 2x1 grid with all unknown") {
+		auto grid = TileGrid(2, 1);
+		auto sweeper = Sweeper(grid);
+
+		WHEN("tile (0, 0) is a number with 1 adjacent mine") {
+			grid.get(0, 0) = {State::Number, 1};
+
+			THEN("tile (0, 0) will least probably be a bomb") {
+				auto safeTile = sweeper.findLeastProbableMine(grid);
+				
+				REQUIRE(safeTile.state == State::Number);
+			}
+		}
+	}
 	//	/*
 	//	WHEN("tile (1, 0) has number 1 and other unkown") {
 	//	auto tile = Tile{State::One};
