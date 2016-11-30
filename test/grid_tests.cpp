@@ -1,7 +1,6 @@
 #include <catch.hpp>
 #include "Grid.h"
 
-
 using namespace helmesjo;
 
 SCENARIO("Read from grid<int>", "[Grid]") {
@@ -63,7 +62,7 @@ SCENARIO("Read from grid<int>", "[Grid]") {
 			myGrid.set(1, 1, -1);
 
 			AND_WHEN("adjacent elements are requested for element (1,1) with a predicated val != -1") {
-				auto adjacent = myGrid.getAdjacent(1, 0, [](auto val) { return val != -1; });
+				auto adjacent = myGrid.getAdjacent(1, 0, [](auto val, auto x, auto y) { return val != -1; });
 
 				THEN("4 adjacent elements should be returned") {
 

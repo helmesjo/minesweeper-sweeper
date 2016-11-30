@@ -10,18 +10,16 @@ namespace helmesjo {
 
 	class Sweeper {
 	public:
-		Sweeper(const Grid<Tile>& grid);
+		Sweeper(Grid<Tile>& grid);
 
 		//Tile findMostProbableMine();
 		void calculateMineProbabilities();
-		double getMineProbability(unsigned int x, unsigned int y) const;
+		double getMineProbability(size_t x, size_t y) const;
 
 	private:
-		void addMineProbability(size_t index, double probability);
 		void resetProbabilities();
 
-		const Grid<Tile>& grid;
-		helmesjo::Grid<double> mineProbabilities;
+		Grid<Tile>& grid;
 	};
 
 }

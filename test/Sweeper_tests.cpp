@@ -22,7 +22,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 		auto sweeper = Sweeper(grid);
 
 		WHEN("tile (1, 1) is a number and got 1 adjacent mine") {
-			grid.get(1,1) = Tile(State::Number, 1u, 1, 1);
+			grid.get(1, 1) = { State::Number, 1u };
 
 			THEN("adjacent tiles should have a mine-probability of 1/8 (1/nrAdjacent)") {
 				sweeper.calculateMineProbabilities();
@@ -46,7 +46,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 			}
 
 			AND_WHEN("tile (1,2) is a flag") {
-				grid.get(1,2) = Tile(State::Flag, 0u, 1, 2);
+				grid.get(1, 2) = { State::Flag, 0u };
 
 				THEN("adjacent tiles should have a mine-probability of 1/7 (1/nrAdjacent, non-unknown are ignored)") {
 					sweeper.calculateMineProbabilities();
@@ -69,7 +69,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 			}
 		}
 		WHEN("tile (1, 1) is a number and got 4 adjacent mine") {
-			grid.get(1,1) = Tile(State::Number, 4, 1, 1);
+			grid.get(1, 1) = { State::Number, 4 };
 
 			THEN("adjacent tiles should have a mine-probability of 4/7 (4/nrAdjacent, non-unknown are ignored)") {
 				sweeper.calculateMineProbabilities();
@@ -97,8 +97,8 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 		auto sweeper = Sweeper(grid);
 
 		WHEN("tile (1, 2) and (1,0) are a numbers with 1 adjacent mine each") {
-			grid.get(1,2) = (Tile(State::Number, 1, 1, 2));
-			grid.get(1,0) = (Tile(State::Number, 1, 1, 0));
+			grid.get(1, 2) = { State::Number, 1 };
+			grid.get(1, 0) = { State::Number, 1 };
 
 			THEN("tile (1,1) should have the summed up mine-probability of 1/5 + 1/5") {
 				sweeper.calculateMineProbabilities();

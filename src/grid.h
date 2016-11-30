@@ -6,10 +6,15 @@
 #include <functional>
 
 namespace helmesjo {
-	
+	struct xy {
+		size_t x;
+		size_t y;
+	};
+
+	// A grid represented in 1D for cache-friendliness (totally not profiled, just a preferred implementation since alot of iterating is happening)
 	template<typename T>
 	class Grid {
-		using Predicate = const std::function<bool(const T&)>;
+		using Predicate = const std::function<bool(const T&, size_t, size_t)>;
 	public:
 
 		Grid(size_t width, size_t height);
@@ -19,15 +24,17 @@ namespace helmesjo {
 		size_t size() const;
 
 		void set(size_t x, size_t y, const T& obj);
-		decltype(auto) get(size_t x, size_t y) const;
-		decltype(auto) get(size_t x, size_t y);
-		decltype(auto) get(size_t index) const;
-		decltype(auto) get(size_t index);
-		std::vector<T> getAdjacent(size_t x, size_t y, Predicate& predicate = nullptr) const;
-		std::vector<T> getAdjacent(size_t index, Predicate& predicate = nullptr) const;
+		const T& get(size_t x, size_t y) const;
+		T& get(size_t x, size_t y);
+		const T& get(size_t index) const;
+		T& get(size_t index);
+		std::vector<xy> getAdjacent(size_t x, size_t y, Predicate& predicate = nullptr) const;
+		std::vector<xy> getAdjacent(size_t index, Predicate& predicate = nullptr) const;
 
-		decltype(auto) begin() const;
-		decltype(auto) end() const;
+		auto begin();
+		auto end();
+		auto begin() const;
+		auto end() const;
 
 	private:
 
@@ -36,12 +43,9 @@ namespace helmesjo {
 	};
 
 
-
-
-
 	struct direction {
-		char x;
-		char y;
+		int x;
+		int y;
 	};
 	const std::array<direction, 8> directions = { { { -1,-1 } ,{ -1,0 } ,{ -1,1 } ,{ 0,-1 } ,{ 0,1 } ,{ 1,-1 } ,{ 1,0 } ,{ 1,1 } } };
 
@@ -94,62 +98,68 @@ namespace helmesjo {
 		elements[index] = obj;
 	}
 	template<typename T>
-	inline decltype(auto) Grid<T>::get(size_t x, size_t y) const
+	inline const T& Grid<T>::get(size_t x, size_t y) const
 	{
 		auto index = calculate1DIndex(_width, x, y);
 		return elements[index];
 	}
 	template<typename T>
-	inline decltype(auto) Grid<T>::get(size_t x, size_t y)
+	inline T& Grid<T>::get(size_t x, size_t y)
 	{
 		auto index = calculate1DIndex(_width, x, y);
 		return elements[index];
 	}
 	template<typename T>
-	inline decltype(auto) Grid<T>::get(size_t index) const
+	inline const T& Grid<T>::get(size_t index) const
 	{
 		return elements[index];
 	}
 	template<typename T>
-	inline decltype(auto) Grid<T>::get(size_t index)
+	inline T& Grid<T>::get(size_t index)
 	{
 		return elements[index];
 	}
 	template<typename T>
-	inline std::vector<T> Grid<T>::getAdjacent(size_t x, size_t y, Predicate& predicate) const
+	inline std::vector<xy> Grid<T>::getAdjacent(size_t x, size_t y, Predicate& predicate) const
 	{
-		auto adjacent = std::vector<T>();
+		auto adjacent = std::vector<xy>();
+
 		for (auto dir : directions) {
 			int dx = x + dir.x;
 			int dy = y + dir.y;
 
 			if (isInRange(_width, _height, dx, dy)) {
-				auto index = calculate1DIndex(_width, dx, dy);
-				auto adjElement = get(index);
-				//auto adjElement = get(dy, dx); // This fails, but why this and not above? 
-					//	Error: C3779: 'helmesjo::grid<helmesjo::Tile>::get': a function that returns 'decltype(auto)' cannot be used before it is defined
-					//	Apparently a bug in MSVC++
-				//if ((included & ajdElement.state) == ajdElement.state)
-				if(predicate == nullptr || predicate(adjElement) == true)
-					adjacent.push_back(adjElement);
+				auto& adjElement = get(dx, dy);
+				if(predicate == nullptr || predicate(adjElement, dx, dy) == true)
+					adjacent.push_back({static_cast<size_t>(dx), static_cast<size_t>(dy)});
 			}
 		}
 		return adjacent;
 	}
 	template<typename T>
-	inline std::vector<T> Grid<T>::getAdjacent(size_t index, Predicate& predicate) const
+	inline std::vector<xy> Grid<T>::getAdjacent(size_t index, Predicate& predicate) const
 	{
 		auto xy = calculate2DIndex(_width, _height, index);
 		return getAdjacent(std::get<0>(xy), std::get<1>(xy), predicate);
 	}
 	template<typename T>
-	inline decltype(auto) Grid<T>::begin() const
+	inline auto Grid<T>::begin() const
 	{
 		return elements.cbegin();
 	}
 	template<typename T>
-	inline decltype(auto) Grid<T>::end() const
+	inline auto Grid<T>::end() const
 	{
 		return elements.cend();
+	}
+	template<typename T>
+	inline auto Grid<T>::begin()
+	{
+		return elements.begin();
+	}
+	template<typename T>
+	inline auto Grid<T>::end()
+	{
+		return elements.end();
 	}
 }

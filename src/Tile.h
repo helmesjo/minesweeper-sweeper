@@ -14,12 +14,12 @@ namespace helmesjo {
 		};
 
 		Tile() = default;
-		Tile(State state, unsigned int adjacentMines, unsigned int x, unsigned int y);
+		Tile(State state, unsigned int adjacentMines);
 
 		State state = State::Unknown;
-		// WILL REMOVE THIS! (was just added as temp convenience)
-		//unsigned int x = 0u, y = 0u;
 		unsigned int adjacentMines = 0u;
+		// This is really an external concern (solver), but convinient to store here
+		double mineProbability = 0u;
 	};
 
 	inline Tile::State operator|(Tile::State a, Tile::State b) {
