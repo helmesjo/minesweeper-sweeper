@@ -8,7 +8,7 @@
 using namespace helmesjo;
 using namespace std;
 
-void sendInputTest() {
+void sendInputTest_send_Ctrl_plus_V_to_notepad() {
 	HWND windowHandle = FindWindow("Notepad", NULL);
 
 	//Bring the Notepad window to the front.
@@ -17,8 +17,6 @@ void sendInputTest() {
 		return;
 	}
 
-	unsigned int presses = 5;
-
 	// Create a generic keyboard event structure
 	INPUT ip;
 	ip.type = INPUT_KEYBOARD;
@@ -26,37 +24,70 @@ void sendInputTest() {
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	for (auto i = 0u; i<presses; i++)
-	{
-		// Press the "Ctrl" key
-		ip.ki.wVk = VK_CONTROL;
-		ip.ki.dwFlags = 0; // 0 for key press
-		SendInput(1, &ip, sizeof(INPUT));
+	// Press the "Ctrl" key
+	ip.ki.wVk = VK_CONTROL;
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
 
-		// Press the "V" key
-		ip.ki.wVk = 'V';
-		ip.ki.dwFlags = 0; // 0 for key press
-		SendInput(1, &ip, sizeof(INPUT));
+	// Press the "V" key
+	ip.ki.wVk = 'V';
+	ip.ki.dwFlags = 0; // 0 for key press
+	SendInput(1, &ip, sizeof(INPUT));
 
-		// Release the "V" key
-		ip.ki.wVk = 'V';
-		ip.ki.dwFlags = KEYEVENTF_KEYUP;
-		SendInput(1, &ip, sizeof(INPUT));
+	// Release the "V" key
+	ip.ki.wVk = 'V';
+	ip.ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, &ip, sizeof(INPUT));
 
-		// Release the "Ctrl" key
-		ip.ki.wVk = VK_CONTROL;
-		ip.ki.dwFlags = KEYEVENTF_KEYUP;
-		SendInput(1, &ip, sizeof(INPUT));
+	// Release the "Ctrl" key
+	ip.ki.wVk = VK_CONTROL;
+	ip.ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, &ip, sizeof(INPUT));
 
-		Sleep(1000); // pause for 1 second
-	}
+	Sleep(1000); // pause for 1 second
 }
 
-void printMinesweeperTest() {
+#define X 123
+#define Y 123
+#define SCREEN_WIDTH 2048
+#define SCREEN_HEIGHT 1152
+
+
+void MouseSetup(INPUT *buffer)
+{
+	buffer->type = INPUT_MOUSE;
+	buffer->mi.mouseData = 0;
+	buffer->mi.dwFlags = MOUSEEVENTF_ABSOLUTE;
+	buffer->mi.time = 0;
+	buffer->mi.dwExtraInfo = 0;
+}
+
+void MouseClick(INPUT *buffer, unsigned int x, unsigned int y)
+{
+	buffer->mi.dx = (x * (0xFFFF / SCREEN_WIDTH)) + 1;
+	buffer->mi.dy = (y * (0xFFFF / SCREEN_HEIGHT)) + 1;
+
+	buffer->mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_LEFTDOWN);
+	SendInput(1, buffer, sizeof(INPUT));
+
+	Sleep(1000);
+
+	buffer->mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_LEFTUP);
+	SendInput(1, buffer, sizeof(INPUT));
+}
+
+void sendInputTest_send_Mouseclick_at_position() {
+	INPUT ip;
+	
+	MouseSetup(&ip);
+
+	MouseClick(&ip, 400, 400);
+}
+
+void minesweeperTest_printWindow(const std::string& processName) {
 	using std::chrono::high_resolution_clock;
 	using std::chrono::milliseconds;
 
-	auto processName = "Minesweeper"s;
 	auto windowDriver = WindowDriver(processName);
 
 	auto clock = chrono::high_resolution_clock();
@@ -73,10 +104,21 @@ void printMinesweeperTest() {
 	//cout << "Printed to file!" << endl;
 }
 
+void minesweeperTest_click(const std::string& processName) {
+	auto windowDriver = WindowDriver(processName);
+
+	windowDriver.sendInput({ 128, 128 });
+
+}
+
 int main(int argc, char* argv[])
 {
-	//printMinesweeperTest();
-	sendInputTest();
+	auto processName = "Minesweeper"s;
+	for (auto i = 0u; i<5; i++)
+		//printMinesweeperTest();
+	minesweeperTest_click(processName);
+	//sendInputTest_send_Ctrl_plus_V_to_notepad();
+	//sendInputTest_send_Mouseclick_at_position();
 
 	return 0;
 }
@@ -96,11 +138,11 @@ auto processName = "Minesweeper"s;
 // Any OS-specific logic happens inside the "driver"
 auto msDriver = WindowDriver(processName);
 
+# SOLVER SIDE: Now all windows-specific stuff is done, and we only use internal data-types (non-windows related = cross-platform)
+
 1: Get print
 // Image is a non-windows object declared by the solver
 Image windowPrint = msDriver.getWindowPrint();
-
-# SOLVER SIDE: Now all windows-specific stuff is done, and we only use internal data-types (non-windows related = cross-platform)
 
 2: Create grid
 // Setup imageMatchers and the grid builder, which will create a grid-object from the window-print
@@ -118,7 +160,7 @@ auto safeTile = solver.findLeastProbableMine(grid);
 auto unsafeTile = solver.findMostProbableMine(grid);
 auto nextMove = solver.decideNextMove(grid); // nextMove constains a tile and command (Click or Flag)
 
-# WINDOWS SIDE:
+# WINDOWS SIDE (invoked by solver):
 
 4. Perform move
 // Send input to minesweeper window

@@ -34,9 +34,44 @@ void WindowDriver::PrintAndSaveToFile(const std::string& filePath)
 	print->Save(filePath.c_str());
 }
 
-bool helmesjo::WindowDriver::sendInput(InputData inputObject)
+INPUT MouseSetup(unsigned int x, unsigned int y)
 {
-	return false;
+	INPUT ip;
+	ip.type = INPUT_MOUSE;
+	ip.mi.dx = (x * (0xFFFF / GetSystemMetrics(SM_CXSCREEN))) + 1;
+	ip.mi.dy = (y * (0xFFFF / GetSystemMetrics(SM_CYSCREEN))) + 1;
+	ip.mi.mouseData = 0;
+	ip.mi.dwFlags = MOUSEEVENTF_ABSOLUTE;
+	ip.mi.time = 0;
+	ip.mi.dwExtraInfo = 0;
+	return ip;
+}
+
+void MouseClick(INPUT ip)
+{
+	ip.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_MOVE);
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(100);
+
+	ip.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_LEFTUP);
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(1000);
+}
+
+void helmesjo::WindowDriver::sendInput(InputData inputObject)
+{
+	SetForegroundWindow(windowHandle);
+	// Assume mouse-click for now (fix later)
+	RECT rect;
+	GetWindowRect(windowHandle, &rect);
+
+	POINT pt = { static_cast<LONG>(inputObject.x), static_cast<LONG>(inputObject.y) };
+	ClientToScreen(windowHandle, &pt);
+
+	auto input = MouseSetup(pt.x, pt.y);
+	MouseClick(input);
 }
 
 /*
