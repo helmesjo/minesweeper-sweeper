@@ -5,12 +5,13 @@ using namespace helmesjo;
 
 WindowDriver::WindowDriver(const std::string& processName)
 {
+	// Do we have to release the handle..?
 	windowHandle = FindWindow(processName.c_str(), NULL);    //the window can't be min
 	if (windowHandle == nullptr)
-		throw std::invalid_argument("Handle to window must not be null");
+		throw std::invalid_argument("Could not find window with name: " + processName);
 }
 
-std::shared_ptr<CImage> WindowDriver::PrintWindow()
+std::shared_ptr<CImage> WindowDriver::printWindow()
 {
 	auto imageDeleter = [](CImage* img) { 
 		img->ReleaseDC();
@@ -29,8 +30,13 @@ std::shared_ptr<CImage> WindowDriver::PrintWindow()
 
 void WindowDriver::PrintAndSaveToFile(const std::string& filePath)
 {
-	auto print = PrintWindow();
+	auto print = printWindow();
 	print->Save(filePath.c_str());
+}
+
+bool helmesjo::WindowDriver::sendInput(InputData inputObject)
+{
+	return false;
 }
 
 /*
