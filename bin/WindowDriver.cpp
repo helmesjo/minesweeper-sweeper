@@ -1,14 +1,16 @@
-#include "WindowPrinter.h"
+#include "WindowDriver.h"
 #include <stdexcept>
 
-WindowPrinter::WindowPrinter(HWND windowHandle) :
-	windowHandle(windowHandle)
+using namespace helmesjo;
+
+WindowDriver::WindowDriver(const std::string& processName)
 {
+	windowHandle = FindWindow(processName.c_str(), NULL);    //the window can't be min
 	if (windowHandle == nullptr)
 		throw std::invalid_argument("Handle to window must not be null");
 }
 
-std::shared_ptr<CImage> WindowPrinter::PrintWindow()
+std::shared_ptr<CImage> WindowDriver::PrintWindow()
 {
 	auto imageDeleter = [](CImage* img) { 
 		img->ReleaseDC();
@@ -25,7 +27,7 @@ std::shared_ptr<CImage> WindowPrinter::PrintWindow()
 	return print;
 }
 
-void WindowPrinter::PrintAndSaveToFile(const std::string& filePath)
+void WindowDriver::PrintAndSaveToFile(const std::string& filePath)
 {
 	auto print = PrintWindow();
 	print->Save(filePath.c_str());
