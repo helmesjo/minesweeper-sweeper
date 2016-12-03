@@ -9,7 +9,7 @@ ExternalProject_Add(
     GIT_REPOSITORY https://github.com/philsquared/Catch.git
 	GIT_TAG v1.5.8
     TIMEOUT 10
-    UPDATE_COMMAND ${GIT_EXECUTABLE} fetch --tags
+    #UPDATE_COMMAND ${GIT_EXECUTABLE} fetch --tags
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     INSTALL_COMMAND ""

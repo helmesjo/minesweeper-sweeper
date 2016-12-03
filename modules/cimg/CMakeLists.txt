@@ -9,7 +9,7 @@ ExternalProject_Add(
     GIT_REPOSITORY https://github.com/dtschump/CImg.git
 	GIT_TAG v.179
     TIMEOUT 10
-    UPDATE_COMMAND ${GIT_EXECUTABLE} fetch --tags
+    #UPDATE_COMMAND ${GIT_EXECUTABLE} fetch --tags
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     INSTALL_COMMAND ""
