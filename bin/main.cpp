@@ -146,7 +146,7 @@ Image windowPrint = msDriver.getWindowPrint();
 
 2: Create grid
 // Setup imageMatchers and the grid builder, which will create a grid-object from the window-print
-auto gridMatcher = ImageMatcher(gridRefImg);
+auto gridMatcher = ImageMatcher(gridRefImg); (ImageMatcher is abstract, so instances used here are some concrete implementations of that)
 auto tileMatcher = ImageMatcher(tileRefImg);
 auto tileStateMatcher = ImageMatcher(numberOneRefImg, bombRefImg, ...);
 auto gridBuilder = GridBuilder(gridMatcher, tileMatcher, tileStateMatcher);
