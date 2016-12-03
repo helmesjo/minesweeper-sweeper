@@ -44,9 +44,12 @@ configure_file(
 
 target_include_directories(${PROJECT_NAME}
 	PRIVATE
-	${PROJECT_BINARY_DIR}/config
+	${PROJECT_BINARY_DIR}/config,
+	${CIMG_INCLUDE_DIR}
 )
-
+add_dependencies(${PROJECT_NAME} 
+	cimg
+)
 	
 set(MAIN_PROJECT_NAME ${PROJECT_NAME} PARENT_SCOPE)
 set(MAIN_PROJECT_DIR ${PROJECT_SOURCE_DIR} PARENT_SCOPE)

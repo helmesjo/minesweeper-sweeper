@@ -15,6 +15,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules)
 add_subdirectory(${CMAKE_MODULE_PATH}/catch)
 add_subdirectory(${CMAKE_MODULE_PATH}/cpplocate)
 set(cpplocate_DIR ${CMAKE_MODULE_PATH}/cpplocate)
+add_subdirectory(${CMAKE_MODULE_PATH}/cimg)
 
 # ---------------	BUILD BIN, LIB & TEST
 add_subdirectory(src)

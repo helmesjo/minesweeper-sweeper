@@ -1,4 +1,5 @@
 #include "Image.h"
+#include "CImg.h"
 
 using namespace helmesjo;
 
