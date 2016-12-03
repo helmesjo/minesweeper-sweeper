@@ -7,9 +7,9 @@
 
 using namespace minesweeper_solver_tests;
 using namespace helmesjo;
+using namespace resources;
 
 SCENARIO("Image matching", "[imagematcher]") {
-	using namespace resources;
 	auto referenceImage = Image(getPath(IMG_MINE_TILE_FLAG));
 	auto imageMatcher = PixelPerfectMatcher();
 
@@ -41,4 +41,41 @@ SCENARIO("Image matching", "[imagematcher]") {
 		}
 	}
 
+}
+
+SCENARIO("Scan for subimage", "[ImageScanner]") {
+	auto largeImgPath = getPath(IMG_MINE_WINDOW);
+	auto subImgPath = getPath(IMG_MINE_TILE_ONE);
+	auto notSubImgPath = getPath(IMG_MINE_TILE_FLAG);
+
+	GIVEN("a sub-image part of a larger image") {
+		auto largeImg = Image(largeImgPath);
+		auto subImg = Image(subImgPath);
+
+		WHEN("sub-image is scanned for in larger image") {
+			auto result = largeImg.findSubImage(subImg);
+
+			THEN("return coordinates of sub-image relative to larger image") {
+				auto foundImg = std::get<bool>(result);
+				auto subRect = std::get<SubRect>(result);
+				REQUIRE(foundImg == true);
+				auto expectedSubRect = SubRect{ 186u, 234u, 217u, 265u };
+				REQUIRE(subRect == expectedSubRect);
+			}
+		}
+	}
+
+	GIVEN("a sub-image NOT part of a larger image") {
+		auto largeImg = Image(largeImgPath);
+		auto subImg = Image(notSubImgPath);
+
+		WHEN("sub-image is scanned for in larger image") {
+			auto result = largeImg.findSubImage(subImg);
+
+			THEN("return false") {
+				auto foundImg = std::get<bool>(result);
+				REQUIRE(foundImg == false);
+			}
+		}
+	}
 }

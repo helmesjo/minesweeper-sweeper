@@ -21,7 +21,19 @@ namespace helmesjo {
 			return !(*this == c2);
 		}
 	};
-	std::ostream& operator << (std::ostream& os, Color color);
+	std::ostream& operator << (std::ostream& os, const Color& color);
+
+	struct SubRect {
+		size_t x1, y1, x2, y2;
+
+		bool operator==(const SubRect& other) {
+			return x1 == other.x1 && y1 == other.y1 && x2 == other.x2 && y2 == other.y2;
+		}
+		bool operator!=(const SubRect& other) {
+			return !(*this == other);
+		}
+	};
+	std::ostream& operator << (std::ostream& os, const SubRect& color);
 
 	class Image {
 	public:
@@ -34,9 +46,10 @@ namespace helmesjo {
 		Color getPixel(size_t x, size_t y) const;
 
 		Image getSubImage(size_t fromX, size_t fromY, size_t toX, size_t toY) const;
+		std::pair<bool, SubRect> findSubImage(const Image& subImage) const;
 
-		bool operator==(const Image& c2) const;
-		bool operator!=(const Image& c2) const;
+		bool operator==(const Image& other) const;
+		bool operator!=(const Image& other) const;
 
 	private:
 		Image(std::unique_ptr<CImg> img);
