@@ -1,16 +1,22 @@
 #pragma once
 
 #include <memory>
+#include "Tile.h"
 
 namespace helmesjo {
-	class Tile;
 	template<typename T>
 	class Grid;
+	class Image;
+	struct ImageMatcher;
 
-	struct GridBuilder {
+	class GridBuilder {
+	public:
 
-		virtual ~GridBuilder() = default;
-		virtual std::unique_ptr<Grid<Tile>> createGrid() = 0;
+		GridBuilder(std::shared_ptr<Image> tileReferenceImage, std::shared_ptr<ImageMatcher> matcher);
+		Tile createTile(const Image& img) const;
 
+	private:
+		std::shared_ptr<Image> emptyTileReferenceImage;
+		std::shared_ptr<ImageMatcher> matcher;
 	};
 }
