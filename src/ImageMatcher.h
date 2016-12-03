@@ -4,14 +4,10 @@ namespace helmesjo {
 
 	class Image;
 
-	class ImageMatcher {
-	public:
-		ImageMatcher(const Image& image);
+	struct ImageMatcher {
 
-		bool isMatch(const Image& image);
+		virtual bool isMatch(const Image& lhs, const Image& rhs) const = 0;
 
-	private:
-		const Image& referenceImage;
 	};
 
 }

@@ -1,44 +1,44 @@
 #include <catch.hpp>
 #include <cpplocate/cpplocate.h>
 
-#include "ImageMatcher.h"
+#include "PixelPerfectMatcher.h"
 #include "Image.h"
 #include "resources.h"
 
 using namespace minesweeper_solver_tests;
 using namespace helmesjo;
-/*
-SCENARIO("Image matching", "[imagematcher]") {
-	auto referenceImage = Image(resources::IMG_MINE_TILE_FLAG);
-	auto imageMatcher = ImageMatcher(referenceImage);
 
-	GIVEN("image matcher contains no/non-matching reference image") {
-		auto imagePath = resources::getPath(resources::IMG_MINE_TILE_BOMB);
+SCENARIO("Image matching", "[imagematcher]") {
+	using namespace resources;
+	auto referenceImage = Image(getPath(IMG_MINE_TILE_FLAG));
+	auto imageMatcher = PixelPerfectMatcher();
+
+	GIVEN("two completely different images") {
+		auto imagePath = getPath(IMG_MINE_TILE_BOMB);
 		auto image = Image(imagePath);
 
-		WHEN("passed image is compared") 
+		WHEN("compared") 
 		{
 			THEN("it's not a match")
 			{
-				auto isMatch = imageMatcher.isMatch(image);
+				auto isMatch = imageMatcher.isMatch(referenceImage, image);
 				REQUIRE(isMatch == false);
 			}
 		}
 	}
 
-	GIVEN("image matcher contains matching reference image") {
-		auto imagePath = resources::getPath(resources::IMG_MINE_TILE_FLAG);
+	GIVEN("two identical images") {
+		auto imagePath = getPath(IMG_MINE_TILE_FLAG);
 		auto image = Image(imagePath);
 
-		WHEN("passed image is compared")
+		WHEN("compared")
 		{
 			THEN("it's a match")
 			{
-				auto isMatch = imageMatcher.isMatch(image);
+				auto isMatch = imageMatcher.isMatch(referenceImage, image);
 				REQUIRE(isMatch == true);
 			}
 		}
 	}
 
 }
-*/

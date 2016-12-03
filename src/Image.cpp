@@ -42,7 +42,7 @@ Image helmesjo::Image::getSubImage(size_t fromX, size_t fromY, size_t toX, size_
 	return Image(std::move(owner));
 }
 
-bool helmesjo::Image::operator==(const Image & other)
+bool helmesjo::Image::operator==(const Image & other) const
 {
 	// Different dimensions?
 	if (this == &other)
@@ -50,6 +50,7 @@ bool helmesjo::Image::operator==(const Image & other)
 	else if (width() != other.width() || height() != other.height())
 		return false;
 
+	// Super-naive implementation: Begging for optimization!
 	Color color1;
 	Color color2;
 	cimg_forXY(*image, x, y) {
@@ -63,7 +64,7 @@ bool helmesjo::Image::operator==(const Image & other)
 	return true;
 }
 
-bool helmesjo::Image::operator!=(const Image & other)
+bool helmesjo::Image::operator!=(const Image & other) const
 {
 	return !(*this == other);
 }

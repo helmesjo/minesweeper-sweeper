@@ -35,8 +35,8 @@ namespace helmesjo {
 
 		Image getSubImage(size_t fromX, size_t fromY, size_t toX, size_t toY) const;
 
-		bool operator==(const Image& c2);
-		bool operator!=(const Image& c2);
+		bool operator==(const Image& c2) const;
+		bool operator!=(const Image& c2) const;
 
 	private:
 		Image(std::unique_ptr<CImg> img);
