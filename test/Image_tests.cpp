@@ -1,20 +1,40 @@
-#include <catch.hpp>
 #include "Image.h"
+#include <catch.hpp>
 #include "resources.h"
 
 using namespace helmesjo;
 using namespace minesweeper_solver_tests;
 
 SCENARIO("Load & Read Image", "[Image]") {
+	auto path = resources::getPath(resources::IMG_MINE_TILE_EMPTY);
 
 	GIVEN("Some image"){
-		auto path = resources::getPath(resources::IMG_MINE_TILE_EMPTY);
 		Image img(path);
-		WHEN("Pixel at (10, 10) is read") {
-			auto color = img.getPixel(10, 10);
+		WHEN("reading pixel-color at (4, 10)") {
+			auto color = img.getPixel(4, 10);
 			THEN("Pixel-color is correct") {
 
-				REQUIRE(color.r == 256u);
+				REQUIRE(color.r == 192u);
+			}
+		}
+	}
+
+	Image img(path);
+	GIVEN("an image of size " + std::to_string(img.width()) + "x" + std::to_string(img.height())) {
+		WHEN("a subimage is cropped out from pixel (1,1) to (3,3)") {
+			auto subimage = img.getSubImage(1, 1, 3, 3);
+
+			THEN("subimage has size 3x3") {
+
+				REQUIRE(subimage.width() == 3);
+				REQUIRE(subimage.height() == 3);
+			}
+			AND_THEN("corner-colors of subimage are same as from original image") {
+				auto color00 = subimage.getPixel(0, 0);
+				auto color22 = subimage.getPixel(2, 2);
+
+				REQUIRE(color00 == img.getPixel(1, 1));
+				REQUIRE(color22 == img.getPixel(3, 3));
 			}
 		}
 	}
