@@ -138,7 +138,7 @@ auto processName = "Minesweeper"s;
 // Any OS-specific logic happens inside the "driver"
 auto msDriver = WindowDriver(processName);
 
-# SOLVER SIDE: Now all windows-specific stuff is done, and we only use internal data-types (non-windows related = cross-platform)
+# SOLVER SIDE: Now all windows-specific stuff is done, and we only use internal data-types (non-windows related "equals" cross-platform)
 
 1: Get print
 // Image is a non-windows object declared by the solver
