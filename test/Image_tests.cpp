@@ -7,6 +7,7 @@ using namespace minesweeper_solver_tests;
 
 SCENARIO("Load & Read Image", "[Image]") {
 	auto path = resources::getPath(resources::IMG_MINE_TILE_EMPTY);
+	auto path2 = resources::getPath(resources::IMG_MINE_TILE_BOMB);
 
 	GIVEN("Some image"){
 		Image img(path);
@@ -36,6 +37,26 @@ SCENARIO("Load & Read Image", "[Image]") {
 				REQUIRE(color00 == img.getPixel(1, 1));
 				REQUIRE(color22 == img.getPixel(3, 3));
 			}
+		}
+	}
+
+	GIVEN("two equal images (different instances)") {
+		Image img1(path);
+		Image img2(path);
+		WHEN("compared with == operator") {
+			auto areEqual = (img1 == img2);
+			THEN("they are equal") {
+				REQUIRE(areEqual == true);
+			}
+		}
+	}
+
+	GIVEN("two non-equal images (different instances)") {
+		Image img1(path);
+		Image img2(path2);
+		THEN("they are not equal") {
+			auto areNotEqual = (img1 != img2);
+			REQUIRE(areNotEqual == true);
 		}
 	}
 

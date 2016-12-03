@@ -42,6 +42,32 @@ Image helmesjo::Image::getSubImage(size_t fromX, size_t fromY, size_t toX, size_
 	return Image(std::move(owner));
 }
 
+bool helmesjo::Image::operator==(const Image & other)
+{
+	// Different dimensions?
+	if (this == &other)
+		return true;
+	else if (width() != other.width() || height() != other.height())
+		return false;
+
+	Color color1;
+	Color color2;
+	cimg_forXY(*image, x, y) {
+		color1 = getPixel(x, y);
+		color2 = other.getPixel(x, y);
+
+		if(color1 != color2)
+			return false;
+	}
+
+	return true;
+}
+
+bool helmesjo::Image::operator!=(const Image & other)
+{
+	return !(*this == other);
+}
+
 std::ostream & helmesjo::operator<<(std::ostream & os, Color color)
 {
 	os << "(" << color.r << "," << color.g << "," << color.b << ")";
