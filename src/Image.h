@@ -41,19 +41,20 @@ namespace helmesjo {
 		Image(const std::string& filepath, std::shared_ptr<ImageMatcher> matcher = nullptr);
 		~Image();
 		Image(Image&& img) = default;
+		Image(std::unique_ptr<CImg> img, std::shared_ptr<ImageMatcher> matcher);
 
 		size_t width() const;
 		size_t height() const;
 		Color getPixel(size_t x, size_t y) const;
 
-		Image getSubImage(size_t fromX, size_t fromY, size_t toX, size_t toY) const;
+		std::unique_ptr<Image> getSubImage(size_t fromX, size_t fromY, size_t toX, size_t toY) const;
 		std::pair<bool, SubRect> findSubImage(const Image& subImage) const;
 
+		Image& operator=(Image&& other);
 		bool operator==(const Image& other) const;
 		bool operator!=(const Image& other) const;
 
 	private:
-		Image(std::unique_ptr<CImg> img, std::shared_ptr<ImageMatcher> matcher);
 
 		std::unique_ptr<CImg> image;
 		std::shared_ptr<ImageMatcher> matcher;

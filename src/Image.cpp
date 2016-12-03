@@ -39,11 +39,11 @@ Color helmesjo::Image::getPixel(size_t x, size_t y) const
 	return Color{ r, g, b };
 }
 
-Image helmesjo::Image::getSubImage(size_t fromX, size_t fromY, size_t toX, size_t toY) const
+std::unique_ptr<Image> helmesjo::Image::getSubImage(size_t fromX, size_t fromY, size_t toX, size_t toY) const
 {
 	auto crop = image->get_crop(fromX, fromY, toX, toY);
 	auto owner = std::unique_ptr<CImg>(new CImg(std::move(crop)));
-	return Image(std::move(owner), matcher);
+	return std::make_unique<Image>(std::move(owner), matcher);
 }
 
 std::pair<bool, SubRect> helmesjo::Image::findSubImage(const Image & subImage) const
@@ -57,12 +57,14 @@ std::pair<bool, SubRect> helmesjo::Image::findSubImage(const Image & subImage) c
 		auto y2 = y + subHeight - 1u;
 		auto subImg2 = getSubImage(x, y, x2, y2);
 
-		if (subImg2 == subImage)
+		if (*subImg2 == subImage)
 			return std::make_pair(true, SubRect{ static_cast<size_t>(x), static_cast<size_t>(y), x2, y2 });
 	}
 
 	return std::make_pair(false, SubRect());
 }
+
+Image & helmesjo::Image::operator=(Image && other) = default;
 
 bool helmesjo::Image::operator==(const Image & other) const
 {

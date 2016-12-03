@@ -27,12 +27,12 @@ SCENARIO("Load & Read Image", "[Image]") {
 
 			THEN("subimage has size 3x3") {
 
-				REQUIRE(subimage.width() == 3);
-				REQUIRE(subimage.height() == 3);
+				REQUIRE(subimage->width() == 3);
+				REQUIRE(subimage->height() == 3);
 			}
 			AND_THEN("corner-colors of subimage are same as from original image") {
-				auto color00 = subimage.getPixel(0, 0);
-				auto color22 = subimage.getPixel(2, 2);
+				auto color00 = subimage->getPixel(0, 0);
+				auto color22 = subimage->getPixel(2, 2);
 
 				REQUIRE(color00 == img.getPixel(1, 1));
 				REQUIRE(color22 == img.getPixel(3, 3));
