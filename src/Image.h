@@ -9,6 +9,7 @@ namespace cimg_library {
 }
 
 namespace helmesjo {
+	struct ImageMatcher;
 	using CImg = cimg_library::CImg<unsigned char>;
 
 	struct Color {
@@ -37,7 +38,7 @@ namespace helmesjo {
 
 	class Image {
 	public:
-		Image(const std::string& filepath);
+		Image(const std::string& filepath, std::shared_ptr<ImageMatcher> matcher = nullptr);
 		~Image();
 		Image(Image&& img) = default;
 
@@ -52,9 +53,10 @@ namespace helmesjo {
 		bool operator!=(const Image& other) const;
 
 	private:
-		Image(std::unique_ptr<CImg> img);
+		Image(std::unique_ptr<CImg> img, std::shared_ptr<ImageMatcher> matcher);
 
 		std::unique_ptr<CImg> image;
+		std::shared_ptr<ImageMatcher> matcher;
 	};
 
 }
