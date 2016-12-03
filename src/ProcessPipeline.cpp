@@ -26,10 +26,17 @@ std::unique_ptr<Grid<Tile>> helmesjo::ProcessPipeline::process(GridData & input)
 		throw e;
 	}
 
-	return input.createResult();
+	return input.extractResult();
 }
 
-std::unique_ptr<Grid<Tile>> helmesjo::GridData::createResult() const
+helmesjo::GridData::GridData(std::unique_ptr<Image> windowImage) :
+	windowImage(std::move(windowImage))
+{
+}
+
+helmesjo::GridData::~GridData() = default;
+
+std::unique_ptr<Grid<Tile>> helmesjo::GridData::extractResult() const
 {
 	return std::unique_ptr<Grid<Tile>>();
 }

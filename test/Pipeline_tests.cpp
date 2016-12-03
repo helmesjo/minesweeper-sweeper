@@ -1,6 +1,7 @@
 #include <catch.hpp>
 #include "ProcessPipeline.h"
 #include "WindowTask.h"
+#include "Image.h"
 #include "resources.h"
 
 using namespace helmesjo;
@@ -16,8 +17,7 @@ SCENARIO("Pipeline & Tasks", "[Pipeline]") {
 
 		auto windowTask = WindowTask(gridTopLeftImg, gridBotRightImg);
 		WHEN("passed GridData with image of the window") {
-			GridData data;
-			data.windowImage = std::make_unique<Image>(getPath(IMG_MINE_WINDOW));
+			GridData data(std::make_unique<Image>(getPath(IMG_MINE_WINDOW)));
 			THEN("sub-image of grid should be found") {
 				windowTask.process(data);
 				
