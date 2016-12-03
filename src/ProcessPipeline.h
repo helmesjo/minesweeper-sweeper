@@ -9,7 +9,7 @@ namespace helmesjo {
 	template<typename T>
 	class Grid;
 
-	/* DATA */
+	/* DATA: This is used as input & output value for each task. It holds data that can be read/written to.*/
 
 	struct GridData {
 		std::unique_ptr<Image> windowImage;
@@ -20,7 +20,7 @@ namespace helmesjo {
 		std::unique_ptr<Grid<Tile>> createResult() const;
 	};
 
-	/* TASK */
+	/* TASK: A task does something specific with the input and may (or may no) modify it. Task are chained in some explicit order to achive final result */
 
 	struct ProcessTask {
 
@@ -29,7 +29,7 @@ namespace helmesjo {
 
 	};
 
-	/* PIPELINE */
+	/* PIPELINE: Consists of a chain of tasks. They will process input-data in order. */
 
 	class ProcessPipeline {
 		using TaskPtr = std::unique_ptr<ProcessTask>;
