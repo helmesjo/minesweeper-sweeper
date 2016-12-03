@@ -49,6 +49,7 @@ namespace helmesjo {
 
 		std::unique_ptr<Image> getSubImage(size_t fromX, size_t fromY, size_t toX, size_t toY) const;
 		std::pair<bool, SubRect> findSubImage(const Image& subImage) const;
+		void saveToPath(std::string path) const;
 
 		Image& operator=(Image&& other);
 		bool operator==(const Image& other) const;

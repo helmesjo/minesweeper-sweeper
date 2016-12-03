@@ -46,15 +46,20 @@ std::unique_ptr<Image> helmesjo::Image::getSubImage(size_t fromX, size_t fromY, 
 	return std::make_unique<Image>(std::move(owner), matcher);
 }
 
+void helmesjo::Image::saveToPath(std::string path) const
+{
+	image->save_bmp(path.c_str());
+}
+
 std::pair<bool, SubRect> helmesjo::Image::findSubImage(const Image & subImage) const
 {
 	auto subWidth = subImage.width();
 	auto subHeight = subImage.height();
 
-	// Here we are instantiating new image for each step... DON'T! Just want to check colors
 	cimg_forXY(*image, x, y) {
 		auto x2 = x + subWidth - 1u;
 		auto y2 = y + subHeight - 1u;
+		// Here we are instantiating new image for each step... DON'T! Just want to check colors!
 		auto subImg2 = getSubImage(x, y, x2, y2);
 
 		if (*subImg2 == subImage)
