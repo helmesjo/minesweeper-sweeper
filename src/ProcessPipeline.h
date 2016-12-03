@@ -18,13 +18,13 @@ namespace helmesjo {
 		~GridData();
 
 		// 1. Supplied on creation
-		std::unique_ptr<Image> windowImage;
+		std::unique_ptr<Image> windowImage = nullptr;
 		// 2. Setup by WindowTask
-		std::unique_ptr<Image> gridImage;
+		std::unique_ptr<Image> gridImage = nullptr;
 		// 3. Setup by GridTask
-		size_t width, height;
+		size_t nrColumns = 0u, nrRows = 0u;
 		// 4. Setup by TileTask
-		std::unique_ptr<Grid<Tile>> grid;
+		std::unique_ptr<Grid<Tile>> grid = nullptr;
 		// 5. Called by user
 		std::unique_ptr<Grid<Tile>> extractResult() const;
 	};
