@@ -19,13 +19,14 @@ namespace helmesjo {
 
 	class Sweeper {
 	public:
+
+		// Clean up below: INTERNAL DETAILS
+		void recalculateMineProbabilities(TileGrid& grid);
+
+		double getMineProbability(size_t x, size_t y, const TileGrid& grid) const;
 		xy findLeastProbableMine(TileGrid& grid);
 		xy findMostProbableMine(TileGrid& grid);
 		NextMove getNextMove(TileGrid& grid);
-
-		// Clean up below: INTERNAL DETAILS
-		void calculateMineProbabilities(TileGrid& grid);
-		double getMineProbability(size_t x, size_t y, const TileGrid& grid) const;
 
 	private:
 		void resetProbabilities(TileGrid& grid);

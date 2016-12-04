@@ -25,7 +25,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 			grid.get(1, 1) = { State::Number, 1u };
 
 			THEN("adjacent tiles should have a mine-probability of 1/8 (1/nrAdjacent)") {
-				sweeper.calculateMineProbabilities(grid);
+				sweeper.recalculateMineProbabilities(grid);
 				auto tile00Prob = sweeper.getMineProbability(0, 0, grid);
 				auto tile10Prob = sweeper.getMineProbability(1, 0, grid);
 				auto tile20Prob = sweeper.getMineProbability(2, 0, grid);
@@ -49,7 +49,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 				grid.get(1, 2) = { State::Flag, 0u };
 
 				THEN("adjacent tiles should have a mine-probability of 0 (1-adjacentFlags/nrAdjacent, non-unknown are ignored)") {
-					sweeper.calculateMineProbabilities(grid);
+					sweeper.recalculateMineProbabilities(grid);
 					auto tile00Prob = sweeper.getMineProbability(0, 0, grid);
 					auto tile10Prob = sweeper.getMineProbability(1, 0, grid);
 					auto tile20Prob = sweeper.getMineProbability(2, 0, grid);
@@ -72,7 +72,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 			grid.get(1, 1) = { State::Number, 4 };
 
 			THEN("adjacent tiles should have a mine-probability of 4/7 (4/nrAdjacent, non-unknown are ignored)") {
-				sweeper.calculateMineProbabilities(grid);
+				sweeper.recalculateMineProbabilities(grid);
 				auto tile00Prob = sweeper.getMineProbability(0, 0, grid);
 				auto tile10Prob = sweeper.getMineProbability(1, 0, grid);
 				auto tile20Prob = sweeper.getMineProbability(2, 0, grid);
@@ -100,7 +100,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 			grid.get(1, 0) = { State::Number, 1 };
 
 			THEN("tile (1,1) should have the summed up mine-probability of 1/5 + 1/5") {
-				sweeper.calculateMineProbabilities(grid);
+				sweeper.recalculateMineProbabilities(grid);
 				auto mineProbability = sweeper.getMineProbability(1, 1, grid);
 
 				const auto expectedProbability = oneFifth + oneFifth;
@@ -130,45 +130,4 @@ SCENARIO("Getting best move", "[Sweeper]") {
 			}
 		}
 	}
-	/*
-	GIVEN("a 9x9 grid with all unknown except one") {
-		auto grid = TileGrid(9, 9);
-
-		WHEN("tile (1, 2) has probability 0.49 & tile (4, 7) has probability 0.52") {
-			auto safeTile = Tile();
-			safeTile.state = State::Unknown;
-			safeTile.adjacentMineProbability = 0.49;
-			grid.set(1, 2, safeTile);
-
-			auto unsafeTile = Tile();
-			safeTile.state = State::Unknown;
-			safeTile.adjacentMineProbability = 0.52;
-			grid.set(4, 7, unsafeTile);
-
-			THEN("then next move should be to click (1,2)") {
-				auto nextMove = sweeper.getNextMove(grid);
-
-				REQUIRE(nextMove.state == NextMove::State::IsSafe);
-				REQUIRE(nextMove.tile.x == 1);
-				REQUIRE(nextMove.tile.y == 2);
-			}
-		}
-	}
-	*/
-	//	/*
-	//	WHEN("tile (1, 0) has number 1 and other unkown") {
-	//	auto tile = Tile{State::One};
-	//	grid.setTile(1, 0, tile);
-	//
-	//	THEN("suggest tile (0, 0) is marked with flag") {
-	//	auto nextMove = sweeper.findNextMove(grid);
-	//
-	//	auto suggestedTile = nextMove.tile;
-	//	auto suggestedColumn = nextMove.column;
-	//	REQUIRE(suggestedTile.state == State::Flag);
-	//	REQUIRE(suggestedColumn == 1);
-	//	}
-	//	}
-	//	*/
-	//}
 }

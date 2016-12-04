@@ -7,6 +7,7 @@
 /*
  * Note: This class holds too much, but the design was a little back and forth so kept it all here for simplicity.
  *		 The whole "Pipeline" can be extracted and generelized, instead of only supporting "Grid Image processing".
+ *		 Pipe- & GridData are structures specifically for "Grid image processing" and should not be here.
 */
 
 namespace helmesjo {
