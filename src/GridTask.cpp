@@ -1,5 +1,10 @@
 #include "GridTask.h"
 
+helmesjo::GridTask::GridTask(std::shared_ptr<Image> gameOverImg):
+	gameOverImg(gameOverImg)
+{
+}
+
 void helmesjo::GridTask::process(GridData & data) const
 {
 	auto& gridImg = *data.gridImage;
@@ -7,10 +12,11 @@ void helmesjo::GridTask::process(GridData & data) const
 	auto width = gridImg.width();
 	auto height = gridImg.height();
 
-	// TODO: Determine size of tile by scanning image (need better ImageMatcher)
+	// TODO: Determine size of tile by scanning image (need better ImageMatcher. Maybe one that alows skipping alpha, makes refimages less dependant on unrelated details)
 	//data.tileWidth = size...;
 	//data.tileHeight = size...;
 
+	data.isGameOver = data.windowImage->findSubImage(*gameOverImg).first; // First == if found
 	data.nrColumns = std::lround(static_cast<float>(width) / static_cast<float>(data.tileWidth));
 	data.nrRows = std::lround(static_cast<float>(height) / static_cast<float>(data.tileHeight));
 }

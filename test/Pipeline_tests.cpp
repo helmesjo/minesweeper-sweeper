@@ -23,7 +23,8 @@ std::unique_ptr<WindowTask> createValidWindowTask() {
 }
 
 std::unique_ptr<GridTask> createValidGridTask() {
-	return std::make_unique<GridTask>();
+	auto gameOverImg = std::make_shared<Image>(getPath(IMG_MINE_GAMEOVER));
+	return std::make_unique<GridTask>(gameOverImg);
 }
 
 std::unique_ptr<TileTask> createValidTileTask() {
@@ -56,7 +57,7 @@ SCENARIO("Pipeline & Tasks", "[Pipeline]") {
 		auto gridTask = createValidGridTask();
 
 		WHEN("finished processing GridData with 9x9 gridImage") {
-			GridData data(nullptr);
+			GridData data(std::make_shared<Image>(getPath(IMG_MINE_WINDOW)));
 			data.tileWidth = tileSize;
 			data.tileHeight = tileSize;
 			data.gridImage = std::make_unique<Image>(getPath(IMG_MINE_GRID));
@@ -64,6 +65,7 @@ SCENARIO("Pipeline & Tasks", "[Pipeline]") {
 
 			THEN("there should be 9 columns and 9 rows") {
 
+				REQUIRE(data.isGameOver == true);
 				REQUIRE(data.nrColumns == 9);
 				REQUIRE(data.nrRows == 9);
 			}

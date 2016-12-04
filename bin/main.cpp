@@ -21,12 +21,13 @@ void minesweeperTest_solve(const std::string& processName) {
 	auto windowDriver = WindowDriver(processName);
 	// Create a image processing pipeline (transform raw window-print into grid)
 	auto pipeData = PipeData();
-	pipeData.gridTopLeftImg = std::make_shared<Image>(getPath(IMG_MINE_GRID_TOPLEFT));
-	pipeData.gridBotRightImg = std::make_shared<Image>(getPath(IMG_MINE_GRID_BOTRIGHT));
+	pipeData.gridTopLeft = std::make_shared<Image>(getPath(IMG_MINE_GRID_TOPLEFT));
+	pipeData.gridBotRight = std::make_shared<Image>(getPath(IMG_MINE_GRID_BOTRIGHT));
 	pipeData.flagTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_FLAG));
 	pipeData.bombTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_BOMB));
 	pipeData.unknownTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_UNKNOWN));
 	pipeData.numberTiles = { std::make_shared<Image>(getPath(IMG_MINE_TILE_ONE)), std::make_shared<Image>(getPath(IMG_MINE_TILE_TWO)) };
+	pipeData.gameOver = std::make_shared<Image>(getPath(IMG_MINE_GAMEOVER));
 
 	auto pipeline = ProcessPipeline::createDefaultPipeline(pipeData);
 
@@ -41,7 +42,7 @@ void minesweeperTest_solve(const std::string& processName) {
 
 	auto next = sweeper.getNextMove(*grid);
 
-	int halfSize = tileSize*0.5;
+	int halfSize = std::lround(tileSize*0.5);
 
 	// Magic numbers are offset for grid in window (ideally should remember this offset when finding grid inside print (print.getSubImage(...)), but time is of the essence!
 	next.tile.x = next.tile.x * tileSize + 11 + halfSize;

@@ -51,8 +51,8 @@ std::unique_ptr<WindowTask> createValidWindowTask(ImgPtr gridTopLeftImg, ImgPtr 
 	return std::make_unique<WindowTask>(gridTopLeftImg, gridBotRightImg);
 }
 
-std::unique_ptr<GridTask> createValidGridTask(size_t tileWith, size_t tileHeight) {
-	return std::make_unique<GridTask>();
+std::unique_ptr<GridTask> createValidGridTask(size_t tileWith, size_t tileHeight, ImgPtr gameOverImg) {
+	return std::make_unique<GridTask>(gameOverImg);
 }
 
 std::unique_ptr<TileTask> createValidTileTask(ImgPtr flagTile, ImgPtr bombTile, ImgPtr unknownTile, std::vector<ImgPtr> numberTiles) {
@@ -61,8 +61,8 @@ std::unique_ptr<TileTask> createValidTileTask(ImgPtr flagTile, ImgPtr bombTile, 
 
 std::unique_ptr<ProcessPipeline> ProcessPipeline::createDefaultPipeline(const PipeData& taskData)
 {
-	auto windowTask = createValidWindowTask(taskData.gridTopLeftImg, taskData.gridBotRightImg);
-	auto gridTask = createValidGridTask(taskData.tileWidth, taskData.tileHeight);
+	auto windowTask = createValidWindowTask(taskData.gridTopLeft, taskData.gridBotRight);
+	auto gridTask = createValidGridTask(taskData.tileWidth, taskData.tileHeight, taskData.gameOver);
 	auto tileTask = createValidTileTask(taskData.flagTile, taskData.bombTile, taskData.unknownTile, taskData.numberTiles);
 
 	auto pipeline = std::make_unique<ProcessPipeline>();

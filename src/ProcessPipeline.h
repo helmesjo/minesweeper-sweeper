@@ -4,6 +4,11 @@
 #include <memory>
 #include "Image.h"
 
+/*
+ * Note: This class holds too much, but the design was a little back and forth so kept it all here for simplicity.
+ *		 The whole "Pipeline" can be extracted and generelized, instead of only supporting "Grid Image processing".
+*/
+
 namespace helmesjo {
 	struct Tile;
 	template<typename T>
@@ -25,6 +30,7 @@ namespace helmesjo {
 		std::shared_ptr<Image> gridImage = nullptr;
 		// 3. Setup by GridTask
 		size_t nrColumns = 0u, nrRows = 0u, tileWidth = 0u, tileHeight = 0u;
+		bool isGameOver = false;
 		// 4. Setup by TileTask
 		std::unique_ptr<Grid<Tile>> grid = nullptr;
 		// 5. Called by user
@@ -40,16 +46,17 @@ namespace helmesjo {
 
 	};
 
-	/* PIPELINE: Consists of a chain of tasks. They will process input-data in order. */
+	/* PIPELINE: Consists of a chain of tasks. They will process "PipeData" in order. */
 
 	struct PipeData {
 		size_t tileWidth, tileHeight;
 
-		ImgPtr gridTopLeftImg;
-		ImgPtr gridBotRightImg;
+		ImgPtr gridTopLeft;
+		ImgPtr gridBotRight;
 		ImgPtr flagTile;
 		ImgPtr bombTile;
 		ImgPtr unknownTile;
+		ImgPtr gameOver;
 
 		std::vector<ImgPtr> numberTiles; // In order
 	};
