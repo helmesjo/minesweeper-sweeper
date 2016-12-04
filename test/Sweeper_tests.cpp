@@ -140,11 +140,11 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 			grid.get(1, 2) = { State::Number, 1 };
 			grid.get(1, 0) = { State::Number, 1 };
 
-			THEN("tile (1,1) should have the summed up mine-probability of 1/5 + 1/5") {
+			THEN("tile (1,1) should have the average mine-probability (1/5 + 1/5) / 2") {
 				sweeper.recalculateMineProbabilities(grid);
 				auto mineProbability = sweeper.calculateMineProbability(1, 1, grid);
 
-				const auto expectedProbability = oneFifth + oneFifth;
+				const auto expectedProbability = oneFifth;
 				REQUIRE(mineProbability == expectedProbability);
 			}
 		}

@@ -34,11 +34,9 @@ void helmesjo::Sweeper::recalculateMineProbabilities(TileGrid& grid)
 	// Reset probabilities
 	resetProbabilities(grid);
 
-	for (auto y = 0u; y < grid.height(); y++) {
-		for (auto x = 0u; x < grid.width(); x++) {
+	for (auto y = 0u; y < grid.height(); y++)
+		for (auto x = 0u; x < grid.width(); x++)
 			grid.get(x, y).adjacentMineProbability = calculateAdjacentMineProbability(x, y, grid);
-		}
-	}
 }
 
 double helmesjo::Sweeper::calculateMineProbability(size_t x, size_t y, const TileGrid& grid) const
@@ -46,7 +44,7 @@ double helmesjo::Sweeper::calculateMineProbability(size_t x, size_t y, const Til
 	auto tile = grid.get(x, y);
 
 	// Can't be bomb
-	if (tile.state != Tile::State::Unknown)
+	if (tile.state == Tile::State::Empty || tile.state == Tile::State::Number)
 		return 0.0;
 
 	// Look through adjacent Number-tiles and detirmine how probable it is that the specifiec tile is a bomb
@@ -57,9 +55,14 @@ double helmesjo::Sweeper::calculateMineProbability(size_t x, size_t y, const Til
 		return tile.state == Tile::State::Number;
 	});
 
-	for (auto index : adjacent) {
-		auto adjProbability = grid.get(index.x, index.y).adjacentMineProbability;
-		mineProbability += adjProbability;
+	if (adjacent.size() > 0) {
+		for (auto index : adjacent) {
+			auto adjProbability = grid.get(index.x, index.y).adjacentMineProbability;
+			// Use the lowest probability, since that indicates that this tile has more knowledge from it's neighbors!
+			mineProbability += adjProbability;
+		}
+
+		mineProbability /= adjacent.size();
 	}
 
 	return mineProbability;
