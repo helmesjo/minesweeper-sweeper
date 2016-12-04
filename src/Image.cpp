@@ -4,34 +4,59 @@
 #include <memory>
 
 using namespace helmesjo;
+using CImg = cimg_library::CImg<unsigned char>;
+
+struct Image::Impl {
+	Impl(const std::string& filepath, std::shared_ptr<ImageMatcher> matcher):
+		image(filepath.c_str()),
+		matcher(std::move(matcher ? matcher : std::make_shared<PixelPerfectMatcher>()))
+	{}
+
+	Impl(CImg&& img, std::shared_ptr<ImageMatcher> matcher) :
+		image(std::move(img)),
+		matcher(std::move(matcher))
+	{}
+
+	CImg image;
+	std::shared_ptr<ImageMatcher> matcher;
+};
 
 Image::Image(const std::string& filepath, std::shared_ptr<ImageMatcher> matcher) :
-	image(std::make_unique<CImg>(filepath.c_str())),
-	matcher(std::move(matcher ? matcher : std::make_shared<PixelPerfectMatcher>()))
+	pimpl(std::make_unique<Impl>(filepath, std::move(matcher)))
 {
 }
 
-Image::Image(std::unique_ptr<CImg> img, std::shared_ptr<ImageMatcher> matcher):
-	image(std::move(img)),
-	matcher(std::move(matcher))
+Image::Image(std::unique_ptr<Impl> impl):
+	pimpl(std::move(impl))
 {
 }
 
 Image::~Image() = default;
+Image & helmesjo::Image::operator=(Image && other) = default;
+
+bool helmesjo::Image::operator==(const Image & other) const
+{
+	return pimpl->matcher->isMatch(*this, other);
+}
+
+bool helmesjo::Image::operator!=(const Image & other) const
+{
+	return !(*this == other);
+}
 
 size_t helmesjo::Image::width() const
 {
-	return image->width();
+	return pimpl->image.width();
 }
 
 size_t helmesjo::Image::height() const
 {
-	return image->height();
+	return pimpl->image.height();
 }
 
 Color helmesjo::Image::getPixel(size_t x, size_t y) const
 {
-	auto img = *image;
+	auto img = pimpl->image;
 	auto r = img(x, y, 0, 0);
 	auto g = img(x, y, 0, 1);
 	auto b = img(x, y, 0, 2);
@@ -41,14 +66,14 @@ Color helmesjo::Image::getPixel(size_t x, size_t y) const
 
 std::unique_ptr<Image> helmesjo::Image::getSubImage(size_t fromX, size_t fromY, size_t toX, size_t toY) const
 {
-	auto crop = image->get_crop(fromX, fromY, toX, toY);
-	auto owner = std::unique_ptr<CImg>(new CImg(std::move(crop)));
-	return std::make_unique<Image>(std::move(owner), matcher);
+	auto crop = pimpl->image.get_crop(fromX, fromY, toX, toY);
+	auto impl = std::make_unique<Impl>(std::move(crop), pimpl->matcher);
+	return std::make_unique<Image>(std::move(impl));
 }
 
 void helmesjo::Image::saveToPath(std::string path) const
 {
-	image->save_bmp(path.c_str());
+	pimpl->image.save_bmp(path.c_str());
 }
 
 std::pair<bool, SubRect> helmesjo::Image::findSubImage(const Image & subImage) const
@@ -56,7 +81,7 @@ std::pair<bool, SubRect> helmesjo::Image::findSubImage(const Image & subImage) c
 	auto subWidth = subImage.width();
 	auto subHeight = subImage.height();
 
-	cimg_forXY(*image, x, y) {
+	cimg_forXY(pimpl->image, x, y) {
 		auto x2 = x + subWidth - 1u;
 		auto y2 = y + subHeight - 1u;
 		// Here we are instantiating new image for each step... DON'T! Just want to check colors!
@@ -67,18 +92,6 @@ std::pair<bool, SubRect> helmesjo::Image::findSubImage(const Image & subImage) c
 	}
 
 	return std::make_pair(false, SubRect());
-}
-
-Image & helmesjo::Image::operator=(Image && other) = default;
-
-bool helmesjo::Image::operator==(const Image & other) const
-{
-	return matcher->isMatch(*this, other);
-}
-
-bool helmesjo::Image::operator!=(const Image & other) const
-{
-	return !(*this == other);
 }
 
 std::ostream & helmesjo::operator<<(std::ostream & os, const Color& color)

@@ -3,14 +3,8 @@
 #include <string>
 #include <memory>
 
-namespace cimg_library {
-	template<typename T>
-	struct CImg;
-}
-
 namespace helmesjo {
 	struct ImageMatcher;
-	using CImg = cimg_library::CImg<unsigned char>;
 
 	struct Color {
 		unsigned int r, g, b;
@@ -37,11 +31,15 @@ namespace helmesjo {
 	std::ostream& operator << (std::ostream& os, const SubRect& color);
 
 	class Image {
+		struct Impl;
 	public:
 		Image(const std::string& filepath, std::shared_ptr<ImageMatcher> matcher = nullptr);
+		Image(std::unique_ptr<Impl> impl);
 		~Image();
 		Image(Image&& img) = default;
-		Image(std::unique_ptr<CImg> img, std::shared_ptr<ImageMatcher> matcher);
+		Image& operator=(Image&& other);
+		bool operator==(const Image& other) const;
+		bool operator!=(const Image& other) const;
 
 		size_t width() const;
 		size_t height() const;
@@ -49,16 +47,12 @@ namespace helmesjo {
 
 		std::unique_ptr<Image> getSubImage(size_t fromX, size_t fromY, size_t toX, size_t toY) const;
 		std::pair<bool, SubRect> findSubImage(const Image& subImage) const;
+		// Used for debugging
 		void saveToPath(std::string path) const;
-
-		Image& operator=(Image&& other);
-		bool operator==(const Image& other) const;
-		bool operator!=(const Image& other) const;
 
 	private:
 
-		std::unique_ptr<CImg> image;
-		std::shared_ptr<ImageMatcher> matcher;
+		std::unique_ptr<Impl> pimpl;
 	};
 
 }
