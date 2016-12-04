@@ -8,10 +8,12 @@ helmesjo::WindowTask::WindowTask(std::shared_ptr<Image> topLeftRefImage, std::sh
 
 void helmesjo::WindowTask::process(GridData & inout) const
 {
-	auto& windowImage = inout.windowImage;
+	auto& windowImage = *inout.windowImage;
 
-	auto topleftResult = windowImage->findSubImage(*topLeftRefImage);
-	auto botrightResult = windowImage->findSubImage(*botRightRefImage);
+	windowImage.previewAndPause();
+
+	auto topleftResult = windowImage.findSubImage(*topLeftRefImage);
+	auto botrightResult = windowImage.findSubImage(*botRightRefImage);
 
 	if (topleftResult.first == false || botrightResult.first == false)
 		throw std::exception("WindowTask: Failed to find grid in image");
@@ -19,5 +21,5 @@ void helmesjo::WindowTask::process(GridData & inout) const
 	auto topLeftRect = topleftResult.second;
 	auto botRightRect = botrightResult.second;
 
-	inout.gridImage = windowImage->getSubImage(topLeftRect.x2, topLeftRect.y2, botRightRect.x1, botRightRect.y1);
+	inout.gridImage = windowImage.getSubImage(topLeftRect.x2, topLeftRect.y2, botRightRect.x1, botRightRect.y1);
 }

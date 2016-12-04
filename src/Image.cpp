@@ -80,6 +80,15 @@ void helmesjo::Image::saveToPath(std::string path) const
 	pimpl->image.save_bmp(path.c_str());
 }
 
+void helmesjo::Image::previewAndPause() const
+{
+	cimg_library::CImgDisplay main_disp(pimpl->image, "Image-preview");
+	CImg visu(width(), height(), 1, 3, 0);
+	visu.draw_image(pimpl->image);
+
+	while (!main_disp.is_closed());
+}
+
 std::pair<bool, SubRect> helmesjo::Image::findSubImage(const Image & subImage) const
 {
 	auto subWidth = subImage.width();

@@ -131,7 +131,7 @@ void minesweeperTest_solve(const std::string& processName) {
 
 	auto pipeline = ProcessPipeline::createDefaultPipeline(pipeData);
 
-	auto print = windowDriver.printWindow();
+	auto print = std::make_shared<Image>(getPath(IMG_MINE_WINDOW));//windowDriver.printWindow();
 
 	GridData gridData(print);
 	auto grid = pipeline->process(gridData);

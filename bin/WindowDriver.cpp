@@ -2,6 +2,7 @@
 #include <atlimage.h>
 #include <stdexcept>
 #include "Image.h"
+#include <cpplocate/cpplocate.h>
 
 using namespace helmesjo;
 
@@ -30,7 +31,12 @@ std::shared_ptr<Image> WindowDriver::printWindow()
 	HDC device_context_handle = print.GetDC();
 	::PrintWindow(windowHandle, device_context_handle, PW_CLIENTONLY);
 
-	return std::make_shared<Image>(static_cast<const unsigned char * const>(print.GetBits()), width, height);
+	auto path = cpplocate::getModulePath() + "/tmp.bmp";
+	print.Save(path.c_str());
+
+	print.ReleaseDC();
+
+	return std::make_shared<Image>(path);
 }
 
 void WindowDriver::PrintAndSaveToFile(const std::string& filePath)

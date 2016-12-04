@@ -10,6 +10,8 @@ void helmesjo::GridTask::process(GridData & data) const
 {
 	auto& gridImg = *data.gridImage;
 
+	gridImg.previewAndPause();
+
 	auto width = gridImg.width();
 	auto height = gridImg.height();
 
