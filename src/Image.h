@@ -3,6 +3,8 @@
 #include <string>
 #include <memory>
 
+// Note: This can be cleaned up, especially all minor data-structures (Color, SubRect...) should probably be extracted into some common place.
+
 namespace helmesjo {
 	struct ImageMatcher;
 
@@ -50,12 +52,13 @@ namespace helmesjo {
 		std::unique_ptr<Image> getSubImage(size_t fromX, size_t fromY, size_t toX, size_t toY) const;
 		std::pair<bool, SubRect> findSubImage(const Image& subImage) const;
 		
-		// Used for debugging
 		void saveToPath(std::string path) const;
-		void pauseAndPreview() const;
+		// Used for debugging
+		void debug_PauseAndPreview() const;
 
 	private:
 
+		// Image is dependant on third-party lib (CImg), and we want to keep those details away from the world
 		std::unique_ptr<Impl> pimpl;
 	};
 

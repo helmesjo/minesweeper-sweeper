@@ -80,7 +80,7 @@ void helmesjo::Image::saveToPath(std::string path) const
 	pimpl->image.save_bmp(path.c_str());
 }
 
-void helmesjo::Image::pauseAndPreview() const
+void helmesjo::Image::debug_PauseAndPreview() const
 {
 	cimg_library::CImgDisplay main_disp(pimpl->image, "Image-preview");
 	CImg visu(width(), height(), 1, 3, 0);
@@ -97,7 +97,8 @@ std::pair<bool, SubRect> helmesjo::Image::findSubImage(const Image & subImage) c
 	cimg_forXY(pimpl->image, x, y) {
 		auto x2 = x + subWidth - 1u;
 		auto y2 = y + subHeight - 1u;
-		// Here we are instantiating new image for each step... DON'T! Just want to check colors!
+
+		// RED ALERT: Here we're instantiating new image for each step... DON'T! Just want to check colors within some subrect of image!
 		auto subImg2 = getSubImage(x, y, x2, y2);
 
 		if (*subImg2 == subImage)
