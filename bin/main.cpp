@@ -144,8 +144,9 @@ void minesweeperTest_solve(const std::string& processName) {
 
 	auto leastProbableMine = sweeper.findLeastProbableMine(*grid);
 
-	InputData input = {leastProbableMine.x * tileSize + 5, leastProbableMine.y * tileSize + 48 }; // Magic numbers are offset for grid in window
-	//windowDriver.sendInput(input);
+	auto halfSize = tileSize*0.5;
+	InputData input = {leastProbableMine.x * tileSize + 11 + halfSize, leastProbableMine.y * tileSize + 64  + halfSize }; // Magic numbers are offset for grid in window
+	windowDriver.sendInput(input);
 
 }
 
