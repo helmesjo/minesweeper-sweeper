@@ -44,7 +44,7 @@ SCENARIO("Image matching", "[imagematcher]") {
 }
 
 SCENARIO("Scan for subimage", "[ImageScanner]") {
-	auto largeImgPath = getPath(IMG_MINE_WINDOW);
+	auto largeImgPath = getPath(IMG_MINE_GRID);
 	auto subImgPath = getPath(IMG_MINE_TILE_ONE);
 	auto notSubImgPath = getPath(IMG_MINE_TILE_FLAG);
 
@@ -59,7 +59,7 @@ SCENARIO("Scan for subimage", "[ImageScanner]") {
 				auto foundImg = std::get<bool>(result);
 				auto subRect = std::get<SubRect>(result);
 				REQUIRE(foundImg == true);
-				auto expectedSubRect = SubRect{ 99u, 207u, 112u, 226u };
+				auto expectedSubRect = SubRect{ 69u, 19u, 75u, 28u };
 				REQUIRE(subRect == expectedSubRect);
 			}
 		}

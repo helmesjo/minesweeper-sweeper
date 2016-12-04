@@ -10,7 +10,7 @@ void helmesjo::WindowTask::process(GridData & inout) const
 {
 	auto& windowImage = *inout.windowImage;
 
-	windowImage.previewAndPause();
+	//windowImage.pauseAndPreview();
 
 	auto topleftResult = windowImage.findSubImage(*topLeftRefImage);
 	auto botrightResult = windowImage.findSubImage(*botRightRefImage);

@@ -1,7 +1,9 @@
 #include "WindowDriver.h"
+#include "Image.h"
+
 #include <atlimage.h>
 #include <stdexcept>
-#include "Image.h"
+#include <Gdiplusimaging.h>
 #include <cpplocate/cpplocate.h>
 
 using namespace helmesjo;
@@ -32,7 +34,7 @@ std::shared_ptr<Image> WindowDriver::printWindow()
 	::PrintWindow(windowHandle, device_context_handle, PW_CLIENTONLY);
 
 	auto path = cpplocate::getModulePath() + "/tmp.bmp";
-	print.Save(path.c_str());
+	print.Save(path.c_str(), Gdiplus::ImageFormatBMP);
 
 	print.ReleaseDC();
 

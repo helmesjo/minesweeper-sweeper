@@ -52,7 +52,7 @@ namespace helmesjo {
 		
 		// Used for debugging
 		void saveToPath(std::string path) const;
-		void previewAndPause() const;
+		void pauseAndPreview() const;
 
 	private:
 

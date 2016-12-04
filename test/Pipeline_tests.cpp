@@ -12,6 +12,8 @@ using namespace helmesjo;
 using namespace minesweeper_solver_tests;
 using namespace minesweeper_solver_tests::resources;
 
+const unsigned int tileSize = 16u;
+
 std::unique_ptr<WindowTask> createValidWindowTask() {
 	auto gridTopLeftImg = std::make_shared<Image>(getPath(IMG_MINE_GRID_TOPLEFT));
 	auto gridBotRightImg = std::make_shared<Image>(getPath(IMG_MINE_GRID_BOTRIGHT));
@@ -19,7 +21,7 @@ std::unique_ptr<WindowTask> createValidWindowTask() {
 }
 
 std::unique_ptr<GridTask> createValidGridTask() {
-	return std::make_unique<GridTask>(32u, 32u);
+	return std::make_unique<GridTask>(tileSize, tileSize);
 }
 
 std::unique_ptr<TileTask> createValidTileTask() {
@@ -72,15 +74,15 @@ SCENARIO("Pipeline & Tasks", "[Pipeline]") {
 			data.gridImage = std::make_unique<Image>(getPath(IMG_MINE_GRID));
 			data.nrColumns = 9;
 			data.nrRows = 9;
-			data.tileWidth = 32;
-			data.tileHeight = 32;
+			data.tileWidth = tileSize;
+			data.tileHeight = tileSize;
 			tileTask->process(data);
 
 			THEN("a grid should be exctractable") {
 				auto grid = data.extractResult();
 
-				REQUIRE(data.tileWidth == 32);
-				REQUIRE(data.tileHeight == 32);
+				REQUIRE(data.tileWidth == tileSize);
+				REQUIRE(data.tileHeight == tileSize);
 				REQUIRE(grid->width() == 9);
 				REQUIRE(grid->height() == 9);
 			}

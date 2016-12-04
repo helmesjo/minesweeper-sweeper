@@ -27,6 +27,9 @@ void helmesjo::TileTask::process(GridData & data) const
 {
 	auto& gridImg = *data.gridImage;
 
+	gridImg.pauseAndPreview();
+	gridImg.saveToPath("gridderp.bmp");
+
 	auto grid = std::make_unique<Grid<Tile>>(data.nrColumns, data.nrRows);
 
 	for (auto y = 0u; y < data.nrRows; y++) {

@@ -80,7 +80,7 @@ void helmesjo::Image::saveToPath(std::string path) const
 	pimpl->image.save_bmp(path.c_str());
 }
 
-void helmesjo::Image::previewAndPause() const
+void helmesjo::Image::pauseAndPreview() const
 {
 	cimg_library::CImgDisplay main_disp(pimpl->image, "Image-preview");
 	CImg visu(width(), height(), 1, 3, 0);
