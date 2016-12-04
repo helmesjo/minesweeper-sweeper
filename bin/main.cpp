@@ -113,7 +113,7 @@ void minesweeperTest_printWindow(const std::string& processName) {
 void minesweeperTest_click(const std::string& processName) {
 	auto windowDriver = WindowDriver(processName);
 
-	windowDriver.sendInput({ 128, 128 });
+	//windowDriver.sendInput({ 128, 128 });
 
 }
 
@@ -142,11 +142,19 @@ void minesweeperTest_solve(const std::string& processName) {
 
 	auto sweeper = Sweeper();
 
-	auto leastProbableMine = sweeper.findLeastProbableMine(*grid);
+	auto next = sweeper.getNextMove(*grid);
 
-	auto halfSize = tileSize*0.5;
-	InputData input = {leastProbableMine.x * tileSize + 11 + halfSize, leastProbableMine.y * tileSize + 64  + halfSize }; // Magic numbers are offset for grid in window
-	windowDriver.sendInput(input);
+	int halfSize = tileSize*0.5;
+
+	next.tile.x = next.tile.x * tileSize + 11 + halfSize;
+	next.tile.y = next.tile.y * tileSize + 64 + halfSize;
+	
+	//InputData input = {leastProbableMine.x * tileSize + 11 + halfSize, leastProbableMine.y * tileSize + 64  + halfSize }; // Magic numbers are offset for grid in window
+
+	if(next.state == NextMove::State::IsSafe)
+		windowDriver.sendLeftClick(next.tile.x, next.tile.y);
+	else
+		windowDriver.sendRightClick(next.tile.x, next.tile.y);
 
 }
 

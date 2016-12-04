@@ -69,8 +69,24 @@ INPUT MouseSetup(unsigned int x, unsigned int y)
 	return ip;
 }
 
-void MouseClick(INPUT ip)
+POINT calculateXY(HWND windowHandle, unsigned int* x, unsigned int* y) {
+	SetForegroundWindow(windowHandle);
+	// Assume mouse-click for now (fix later)
+	RECT rect;
+	GetWindowRect(windowHandle, &rect);
+
+	POINT pt = { static_cast<LONG>(*x), static_cast<LONG>(*y) };
+	ClientToScreen(windowHandle, &pt);
+
+	return pt;
+}
+
+void helmesjo::WindowDriver::sendLeftClick(unsigned int x, unsigned int y)
 {
+	POINT pt = calculateXY(windowHandle, &x, &y);//{ static_cast<LONG>(x), static_cast<LONG>(y) };
+
+	auto ip = MouseSetup(pt.x, pt.y);
+	
 	ip.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE | MOUSEEVENTF_LEFTDOWN);
 	SendInput(1, &ip, sizeof(INPUT));
 
@@ -78,22 +94,21 @@ void MouseClick(INPUT ip)
 
 	ip.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_LEFTUP);
 	SendInput(1, &ip, sizeof(INPUT));
-
-	Sleep(1000);
 }
 
-void helmesjo::WindowDriver::sendInput(InputData inputObject)
+void helmesjo::WindowDriver::sendRightClick(unsigned int x, unsigned int y)
 {
-	SetForegroundWindow(windowHandle);
-	// Assume mouse-click for now (fix later)
-	RECT rect;
-	GetWindowRect(windowHandle, &rect);
+	POINT pt = calculateXY(windowHandle, &x, &y);//{ static_cast<LONG>(x), static_cast<LONG>(y) };
 
-	POINT pt = { static_cast<LONG>(inputObject.x), static_cast<LONG>(inputObject.y) };
-	ClientToScreen(windowHandle, &pt);
+	auto ip = MouseSetup(pt.x, pt.y);
 
-	auto input = MouseSetup(pt.x, pt.y);
-	MouseClick(input);
+	ip.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE | MOUSEEVENTF_RIGHTDOWN);
+	SendInput(1, &ip, sizeof(INPUT));
+
+	Sleep(100);
+
+	ip.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_RIGHTUP);
+	SendInput(1, &ip, sizeof(INPUT));
 }
 
 /*

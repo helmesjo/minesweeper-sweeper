@@ -128,6 +128,31 @@ SCENARIO("Getting best move", "[Sweeper]") {
 			}
 		}
 	}
+
+	GIVEN("a 3x3 grid with all unknown") {
+		auto grid = TileGrid(3, 3);
+
+		WHEN("tile (1, 2) has probability 0.49 & tile (4, 7) has probability 0.52") {
+			auto safeTile = Tile();
+			safeTile.state = State::Unknown;
+			safeTile.mineProbability = 0.49;
+			grid.set(1, 2, safeTile);
+
+			auto unsafeTile = Tile();
+			safeTile.state = State::Unknown;
+			safeTile.mineProbability = 0.52;
+			grid.set(4, 7, unsafeTile);
+
+			THEN("then next move should be to mark 0.52 as bomb because distance to closest int is the smallest") {
+				auto nextMove = sweeper.getNextMove(grid);
+
+				REQUIRE(nextMove.state == NextMove::State::IsBomb);
+				REQUIRE(nextMove.tile.x == 4);
+				REQUIRE(nextMove.tile.y == 7);
+			}
+		}
+	}
+
 	//	/*
 	//	WHEN("tile (1, 0) has number 1 and other unkown") {
 	//	auto tile = Tile{State::One};

@@ -19,7 +19,8 @@ namespace helmesjo {
 		// Debugging only: Remove when done.
 		void PrintAndSaveToFile(const std::string& filePath);
 
-		void sendInput(InputData inputObject);
+		void sendLeftClick(unsigned int x, unsigned int y);
+		void sendRightClick(unsigned int x, unsigned int y);
 
 	private:
 		HWND windowHandle;
