@@ -132,7 +132,6 @@ void minesweeperTest_solve(const std::string& processName) {
 	auto pipeline = ProcessPipeline::createDefaultPipeline(pipeData);
 
 	auto print = windowDriver.printWindow();
-	print->saveToPath("print");
 
 	GridData gridData(print);
 	gridData.tileWidth = 16u;

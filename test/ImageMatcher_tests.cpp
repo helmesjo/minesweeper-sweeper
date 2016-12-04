@@ -46,7 +46,7 @@ SCENARIO("Image matching", "[imagematcher]") {
 SCENARIO("Scan for subimage", "[ImageScanner]") {
 	auto largeImgPath = getPath(IMG_MINE_GRID);
 	auto subImgPath = getPath(IMG_MINE_TILE_ONE);
-	auto notSubImgPath = getPath(IMG_MINE_TILE_FLAG);
+	auto notSubImgPath = getPath(IMG_DUMMY);
 
 	GIVEN("a sub-image part of a larger image") {
 		auto largeImg = Image(largeImgPath);

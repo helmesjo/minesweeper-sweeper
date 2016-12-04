@@ -9,6 +9,8 @@ namespace @META_PROJECT_NAMESPACE@ {
 		
 		const std::string RESOURCE_FOLDER_PATH = "/@META_RESOURCES_DIR@";
 		
+		const std::string IMG_DUMMY = "img-dummy.bmp";
+		
 		const std::string IMG_MINE_WINDOW = "img-mine-window.bmp";
 		const std::string IMG_MINE_GRID = "img-mine-grid.bmp";
 		const std::string IMG_MINE_GRID_TOPLEFT = "img-mine-grid-topleft.bmp";

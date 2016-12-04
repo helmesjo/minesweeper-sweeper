@@ -21,7 +21,7 @@ std::unique_ptr<WindowTask> createValidWindowTask() {
 }
 
 std::unique_ptr<GridTask> createValidGridTask() {
-	return std::make_unique<GridTask>(tileSize, tileSize);
+	return std::make_unique<GridTask>();
 }
 
 std::unique_ptr<TileTask> createValidTileTask() {
@@ -55,6 +55,8 @@ SCENARIO("Pipeline & Tasks", "[Pipeline]") {
 
 		WHEN("finished processing GridData with 9x9 gridImage") {
 			GridData data(nullptr);
+			data.tileWidth = tileSize;
+			data.tileHeight = tileSize;
 			data.gridImage = std::make_unique<Image>(getPath(IMG_MINE_GRID));
 			gridTask->process(data);
 
@@ -101,6 +103,8 @@ SCENARIO("Pipeline & Tasks", "[Pipeline]") {
 		pipeline.addTask(std::move(tileTask));
 		WHEN("processing GridData with only windowImage") {
 			GridData data(std::make_unique<Image>(getPath(IMG_MINE_WINDOW)));
+			data.tileWidth = tileSize;
+			data.tileHeight = tileSize;
 			auto grid = pipeline.process(data);
 
 			THEN("a grid will be extractable") {

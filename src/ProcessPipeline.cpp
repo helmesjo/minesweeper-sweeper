@@ -52,7 +52,7 @@ std::unique_ptr<WindowTask> createValidWindowTask(ImgPtr gridTopLeftImg, ImgPtr 
 }
 
 std::unique_ptr<GridTask> createValidGridTask(size_t tileWith, size_t tileHeight) {
-	return std::make_unique<GridTask>(32u, 32u);
+	return std::make_unique<GridTask>();
 }
 
 std::unique_ptr<TileTask> createValidTileTask(ImgPtr flagTile, ImgPtr bombTile, ImgPtr unknownTile, std::vector<ImgPtr> numberTiles) {
