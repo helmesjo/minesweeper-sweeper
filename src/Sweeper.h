@@ -8,7 +8,7 @@ namespace helmesjo {
 
 	class Sweeper {
 	public:
-		Tile findLeastProbableMine(Grid<Tile>& grid);
+		xy findLeastProbableMine(Grid<Tile>& grid);
 
 		// Clean up below: INTERNAL DETAILS
 		void calculateMineProbabilities(Grid<Tile>& grid);

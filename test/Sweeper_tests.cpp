@@ -121,7 +121,8 @@ SCENARIO("Getting best move", "[Sweeper]") {
 			grid.get(0, 0) = {State::Number, 1};
 
 			THEN("tile (0, 0) will least probably be a bomb") {
-				auto safeTile = sweeper.findLeastProbableMine(grid);
+				auto coords = sweeper.findLeastProbableMine(grid);
+				auto safeTile = grid.get(coords.x, coords.x);
 				
 				REQUIRE(safeTile.state == State::Number);
 			}

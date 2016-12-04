@@ -8,6 +8,14 @@
 
 using namespace helmesjo;
 
+#define SCREEN_WIDTH (::GetSystemMetrics( SM_CXSCREEN )-1) 
+#define SCREEN_HEIGHT (::GetSystemMetrics( SM_CYSCREEN )-1) 
+
+static void inline makeAbsXY(double &x, double &y) {
+	x = (x * 0xFFFF) / SCREEN_WIDTH;
+	y = (y * 0xFFFF) / SCREEN_HEIGHT;
+}
+
 WindowDriver::WindowDriver(const std::string& processName)
 {
 	// Do we have to release the handle..?
@@ -52,8 +60,8 @@ INPUT MouseSetup(unsigned int x, unsigned int y)
 {
 	INPUT ip;
 	ip.type = INPUT_MOUSE;
-	ip.mi.dx = (x * (0xFFFF / GetSystemMetrics(SM_CXSCREEN))) + 1;
-	ip.mi.dy = (y * (0xFFFF / GetSystemMetrics(SM_CYSCREEN))) + 1;
+	ip.mi.dx = x * (0xFFFF / SCREEN_WIDTH);
+	ip.mi.dy = y * (0xFFFF / SCREEN_HEIGHT);
 	ip.mi.mouseData = 0;
 	ip.mi.dwFlags = MOUSEEVENTF_ABSOLUTE;
 	ip.mi.time = 0;
@@ -63,7 +71,7 @@ INPUT MouseSetup(unsigned int x, unsigned int y)
 
 void MouseClick(INPUT ip)
 {
-	ip.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_MOVE);
+	ip.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE | MOUSEEVENTF_LEFTDOWN);
 	SendInput(1, &ip, sizeof(INPUT));
 
 	Sleep(100);

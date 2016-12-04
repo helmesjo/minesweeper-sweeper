@@ -118,6 +118,8 @@ void minesweeperTest_click(const std::string& processName) {
 }
 
 void minesweeperTest_solve(const std::string& processName) {
+	const size_t tileSize = 16u;
+
 	// Setup driver (communicator with minesweeper window)
 	auto windowDriver = WindowDriver(processName);
 	// Create a image processing pipeline (transform raw window-print into grid)
@@ -134,16 +136,16 @@ void minesweeperTest_solve(const std::string& processName) {
 	auto print = windowDriver.printWindow();
 
 	GridData gridData(print);
-	gridData.tileWidth = 16u;
-	gridData.tileHeight = 16u;
+	gridData.tileWidth = tileSize;
+	gridData.tileHeight = tileSize;
 	auto grid = pipeline->process(gridData);
 
 	auto sweeper = Sweeper();
 
 	auto leastProbableMine = sweeper.findLeastProbableMine(*grid);
 
-	InputData input;
-	windowDriver.sendInput(input);
+	InputData input = {leastProbableMine.x * tileSize + 5, leastProbableMine.y * tileSize + 48 }; // Magic numbers are offset for grid in window
+	//windowDriver.sendInput(input);
 
 }
 
@@ -152,7 +154,10 @@ int main(int argc, char* argv[])
 	const auto processName = "Minesweeper"s;
 	//for (auto i = 0u; i<5; i++)
 		//printMinesweeperTest();
-	minesweeperTest_solve(processName);
+	while (true) {
+		minesweeperTest_solve(processName);
+		Sleep(3000);
+	}
 	//minesweeperTest_click(processName);
 	//sendInputTest_send_Ctrl_plus_V_to_notepad();
 	//sendInputTest_send_Mouseclick_at_position();

@@ -1,17 +1,30 @@
 #include "Sweeper.h"
 #include <algorithm>
 #include <tuple>
+#include <limits>
 
 using namespace helmesjo;
 
-Tile helmesjo::Sweeper::findLeastProbableMine(Grid<Tile>& grid)
+xy helmesjo::Sweeper::findLeastProbableMine(Grid<Tile>& grid)
 {
 	// Should return value here instead
 	calculateMineProbabilities(grid);
 	
-	auto min = std::min_element(grid.begin(), grid.end(), [](auto x, auto y) { return x.mineProbability < y.mineProbability; });
+	auto max = std::numeric_limits<size_t>::max();
+	xy coords{ max, max };
+	double minProbability = std::numeric_limits<double>::max();
 
-	return *min;
+	for (auto y = 0u; y < grid.height(); y++) {
+		for (auto x = 0u; x < grid.width(); x++) {
+			auto tile = grid.get(x, y);
+			if (tile.state == Tile::State::Unknown && tile.mineProbability < minProbability) {
+				coords = { x, y };
+				minProbability = tile.mineProbability;
+			}
+		}
+	}
+
+	return coords;
 }
 
 // Return pair with least- and most probable mines (xy-indeces)

@@ -12,6 +12,8 @@ using namespace helmesjo;
 using namespace minesweeper_solver_tests;
 using namespace minesweeper_solver_tests::resources;
 
+using State = Tile::State;
+
 const unsigned int tileSize = 16u;
 
 std::unique_ptr<WindowTask> createValidWindowTask() {
@@ -83,10 +85,25 @@ SCENARIO("Pipeline & Tasks", "[Pipeline]") {
 			THEN("a grid should be exctractable") {
 				auto grid = data.extractResult();
 
+				auto tile52 = grid->get(5, 2);
+				auto tile60 = grid->get(6, 0);
+				auto tile61 = grid->get(6, 1);
+				auto tile63 = grid->get(6, 3);
+				auto tile33 = grid->get(3, 3);
+				auto tile08 = grid->get(0, 8);
+
 				REQUIRE(data.tileWidth == tileSize);
 				REQUIRE(data.tileHeight == tileSize);
 				REQUIRE(grid->width() == 9);
 				REQUIRE(grid->height() == 9);
+				REQUIRE(tile52.state == State::Empty);
+				REQUIRE(tile60.state == State::Bomb);
+				REQUIRE(tile61.state == State::Number);
+				REQUIRE(tile61.adjacentMines == 2);
+				REQUIRE(tile63.state == State::Number);
+				REQUIRE(tile63.adjacentMines == 1);
+				REQUIRE(tile33.state == State::Unknown);
+				REQUIRE(tile08.state == State::Flag);
 			}
 		}
 	}
