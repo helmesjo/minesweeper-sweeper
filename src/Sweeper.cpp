@@ -55,14 +55,10 @@ double helmesjo::Sweeper::calculateMineProbability(size_t x, size_t y, const Til
 		return tile.state == Tile::State::Number;
 	});
 
-	if (adjacent.size() > 0) {
-		for (auto index : adjacent) {
-			auto adjProbability = grid.get(index.x, index.y).adjacentMineProbability;
-			// Use the lowest probability, since that indicates that this tile has more knowledge from it's neighbors!
-			mineProbability += adjProbability;
-		}
-
-		mineProbability /= adjacent.size();
+	for (auto index : adjacent) {
+		auto adjProbability = grid.get(index.x, index.y).adjacentMineProbability;
+		// Use the lowest probability, since that indicates that this tile has more knowledge from it's neighbors!
+		mineProbability += adjProbability;
 	}
 
 	return mineProbability;
