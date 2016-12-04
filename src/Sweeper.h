@@ -5,8 +5,6 @@
 #include "Grid.h"
 
 namespace helmesjo {
-	using TileGrid = Grid<Tile>;
-
 	struct NextMove {
 		enum class State {
 			IsBomb,
@@ -18,18 +16,23 @@ namespace helmesjo {
 	};
 
 	class Sweeper {
+		using TileGrid = Grid<Tile>;
 	public:
+
+		double calculateAdjacentMineProbability(size_t x, size_t y, const TileGrid& grid) const;
 
 		// Clean up below: INTERNAL DETAILS
 		void recalculateMineProbabilities(TileGrid& grid);
 
-		double getMineProbability(size_t x, size_t y, const TileGrid& grid) const;
+		double calculateMineProbability(size_t x, size_t y, const TileGrid& grid) const;
 		xy findLeastProbableMine(TileGrid& grid);
 		xy findMostProbableMine(TileGrid& grid);
 		NextMove getNextMove(TileGrid& grid);
 
 	private:
 		void resetProbabilities(TileGrid& grid);
+
+		//Grid<double> mineProbabilities;
 	};
 
 }

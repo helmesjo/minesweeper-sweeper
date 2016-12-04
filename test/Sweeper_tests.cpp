@@ -7,9 +7,50 @@
 
 using namespace helmesjo;
 using State = Tile::State;
+using TileGrid = helmesjo::Grid<Tile>;
+
+SCENARIO("Calculating adjacent-mine probabilities", "[Sweeper]") {
+	const auto oneSeventh = 1.0 / 7.0;
+	const auto oneEighth = 1.0 / 8.0;
+	const auto fourEighths = 4.0 / 8.0;
+	const auto oneFifth = 1.0 / 5.0;
+
+	auto sweeper = Sweeper();
+
+	GIVEN("a 3x3 grid") {
+		auto grid = TileGrid(3, 3);
+
+		WHEN("tile (1, 1) has 1 surrounding mine") {
+			grid.get(1, 1) = { State::Number, 1u };
+
+			AND_WHEN("all other tiles are unknown") {
+				THEN("tile (1, 1) has 1/8 probability to have an adjacent mine") {
+					auto adjacentMineProbability = sweeper.calculateAdjacentMineProbability(1, 1, grid);
+
+					REQUIRE(adjacentMineProbability == oneEighth);
+				}
+			}
+		}
+	}
+
+	GIVEN("a 3x3 grid") {
+		auto grid = TileGrid(3, 3);
+
+		WHEN("tile (1, 1) has 1 adjacent mine and 1 flag") {
+			grid.get(1, 1) = { State::Number, 1u };
+			grid.get(1, 2) = { State::Flag, 1u };
+			AND_WHEN("all other tiles are unknown") {
+				THEN("tile (1, 1) has 0 (mines-flags/7) probability to have an adjacent mine") {
+					auto adjacentMineProbability = sweeper.calculateAdjacentMineProbability(1, 1, grid);
+					
+					REQUIRE(adjacentMineProbability == 0.0);
+				}
+			}
+		}
+	}
+}
 
 SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
-	using TileGrid = helmesjo::Grid<Tile>;
 	auto sweeper = Sweeper();
 
 	// Probabilities
@@ -26,14 +67,14 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 
 			THEN("adjacent tiles should have a mine-probability of 1/8 (1/nrAdjacent)") {
 				sweeper.recalculateMineProbabilities(grid);
-				auto tile00Prob = sweeper.getMineProbability(0, 0, grid);
-				auto tile10Prob = sweeper.getMineProbability(1, 0, grid);
-				auto tile20Prob = sweeper.getMineProbability(2, 0, grid);
-				auto tile01Prob = sweeper.getMineProbability(0, 1, grid);
-				auto tile21Prob = sweeper.getMineProbability(2, 1, grid);
-				auto tile02Prob = sweeper.getMineProbability(0, 2, grid);
-				auto tile12Prob = sweeper.getMineProbability(1, 2, grid);
-				auto tile22Prob = sweeper.getMineProbability(2, 2, grid);
+				auto tile00Prob = sweeper.calculateMineProbability(0, 0, grid);
+				auto tile10Prob = sweeper.calculateMineProbability(1, 0, grid);
+				auto tile20Prob = sweeper.calculateMineProbability(2, 0, grid);
+				auto tile01Prob = sweeper.calculateMineProbability(0, 1, grid);
+				auto tile21Prob = sweeper.calculateMineProbability(2, 1, grid);
+				auto tile02Prob = sweeper.calculateMineProbability(0, 2, grid);
+				auto tile12Prob = sweeper.calculateMineProbability(1, 2, grid);
+				auto tile22Prob = sweeper.calculateMineProbability(2, 2, grid);
 
 				REQUIRE(tile00Prob == oneEighth);
 				REQUIRE(tile10Prob == oneEighth);
@@ -50,13 +91,13 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 
 				THEN("adjacent tiles should have a mine-probability of 0 (1-adjacentFlags/nrAdjacent, non-unknown are ignored)") {
 					sweeper.recalculateMineProbabilities(grid);
-					auto tile00Prob = sweeper.getMineProbability(0, 0, grid);
-					auto tile10Prob = sweeper.getMineProbability(1, 0, grid);
-					auto tile20Prob = sweeper.getMineProbability(2, 0, grid);
-					auto tile01Prob = sweeper.getMineProbability(0, 1, grid);
-					auto tile21Prob = sweeper.getMineProbability(2, 1, grid);
-					auto tile02Prob = sweeper.getMineProbability(0, 2, grid);
-					auto tile22Prob = sweeper.getMineProbability(2, 2, grid);
+					auto tile00Prob = sweeper.calculateMineProbability(0, 0, grid);
+					auto tile10Prob = sweeper.calculateMineProbability(1, 0, grid);
+					auto tile20Prob = sweeper.calculateMineProbability(2, 0, grid);
+					auto tile01Prob = sweeper.calculateMineProbability(0, 1, grid);
+					auto tile21Prob = sweeper.calculateMineProbability(2, 1, grid);
+					auto tile02Prob = sweeper.calculateMineProbability(0, 2, grid);
+					auto tile22Prob = sweeper.calculateMineProbability(2, 2, grid);
 
 					REQUIRE(tile00Prob == 0.0);
 					REQUIRE(tile10Prob == 0.0);
@@ -73,13 +114,13 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 
 			THEN("adjacent tiles should have a mine-probability of 4/7 (4/nrAdjacent, non-unknown are ignored)") {
 				sweeper.recalculateMineProbabilities(grid);
-				auto tile00Prob = sweeper.getMineProbability(0, 0, grid);
-				auto tile10Prob = sweeper.getMineProbability(1, 0, grid);
-				auto tile20Prob = sweeper.getMineProbability(2, 0, grid);
-				auto tile01Prob = sweeper.getMineProbability(0, 1, grid);
-				auto tile21Prob = sweeper.getMineProbability(2, 1, grid);
-				auto tile02Prob = sweeper.getMineProbability(0, 2, grid);
-				auto tile22Prob = sweeper.getMineProbability(2, 2, grid);
+				auto tile00Prob = sweeper.calculateMineProbability(0, 0, grid);
+				auto tile10Prob = sweeper.calculateMineProbability(1, 0, grid);
+				auto tile20Prob = sweeper.calculateMineProbability(2, 0, grid);
+				auto tile01Prob = sweeper.calculateMineProbability(0, 1, grid);
+				auto tile21Prob = sweeper.calculateMineProbability(2, 1, grid);
+				auto tile02Prob = sweeper.calculateMineProbability(0, 2, grid);
+				auto tile22Prob = sweeper.calculateMineProbability(2, 2, grid);
 
 				REQUIRE(tile00Prob == fourEighths);
 				REQUIRE(tile10Prob == fourEighths);
@@ -101,7 +142,7 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 
 			THEN("tile (1,1) should have the summed up mine-probability of 1/5 + 1/5") {
 				sweeper.recalculateMineProbabilities(grid);
-				auto mineProbability = sweeper.getMineProbability(1, 1, grid);
+				auto mineProbability = sweeper.calculateMineProbability(1, 1, grid);
 
 				const auto expectedProbability = oneFifth + oneFifth;
 				REQUIRE(mineProbability == expectedProbability);
@@ -111,7 +152,6 @@ SCENARIO("Calculating mine-probabilities", "[Sweeper]") {
 }
 
 SCENARIO("Getting best move", "[Sweeper]") {
-	using TileGrid = helmesjo::Grid<Tile>;
 	auto sweeper = Sweeper();
 
 	GIVEN("a 3x1 grid with all unknown") {
