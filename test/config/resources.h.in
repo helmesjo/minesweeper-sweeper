@@ -11,6 +11,7 @@ namespace @META_PROJECT_NAMESPACE@ {
 		
 		const std::string IMG_DUMMY = "img-dummy.bmp";
 		
+		const std::string IMG_MINE_GAMEOVER = "img-mine-gameover.bmp";
 		const std::string IMG_MINE_WINDOW = "img-mine-window.bmp";
 		const std::string IMG_MINE_GRID = "img-mine-grid.bmp";
 		const std::string IMG_MINE_GRID_TOPLEFT = "img-mine-grid-topleft.bmp";

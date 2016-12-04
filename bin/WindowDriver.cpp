@@ -90,7 +90,7 @@ void helmesjo::WindowDriver::sendLeftClick(unsigned int x, unsigned int y)
 	ip.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE | MOUSEEVENTF_LEFTDOWN);
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(100);
+	Sleep(1);
 
 	ip.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_LEFTUP);
 	SendInput(1, &ip, sizeof(INPUT));
@@ -105,7 +105,7 @@ void helmesjo::WindowDriver::sendRightClick(unsigned int x, unsigned int y)
 	ip.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE | MOUSEEVENTF_RIGHTDOWN);
 	SendInput(1, &ip, sizeof(INPUT));
 
-	Sleep(100);
+	Sleep(1);
 
 	ip.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_RIGHTUP);
 	SendInput(1, &ip, sizeof(INPUT));

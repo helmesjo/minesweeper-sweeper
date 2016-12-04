@@ -129,5 +129,5 @@ double helmesjo::Sweeper::getMineProbability(size_t x, size_t y, const TileGrid&
 void helmesjo::Sweeper::resetProbabilities(TileGrid& grid)
 {
 	for (auto& tile : grid)
-		tile.adjacentMineProbability = 0.0; 
+		tile.adjacentMineProbability = 0.5;
 }

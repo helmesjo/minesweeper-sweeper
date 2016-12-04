@@ -165,7 +165,7 @@ int main(int argc, char* argv[])
 		//printMinesweeperTest();
 	while (true) {
 		minesweeperTest_solve(processName);
-		Sleep(3000);
+		Sleep(2000);
 	}
 	//minesweeperTest_click(processName);
 	//sendInputTest_send_Ctrl_plus_V_to_notepad();
