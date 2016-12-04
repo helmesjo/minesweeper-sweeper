@@ -14,6 +14,16 @@ using namespace helmesjo;
 using namespace minesweeper_sweeper::resources;
 using namespace std;
 
+// Should've done this prettier, but running out of time...
+struct Stats {
+	unsigned int gamesWon = 1u;
+	unsigned int gamesLost = 1u;
+
+	double getWinPercentage() const { return (static_cast<double>(gamesWon) / static_cast<double>(gamesLost)) * 100; }
+
+};
+Stats stats;
+
 auto createPipeline() {
 	auto pipeData = PipeData();
 	pipeData.gridTopLeft = std::make_shared<Image>(getPath(IMG_MINE_GRID_TOPLEFT));
@@ -29,6 +39,7 @@ auto createPipeline() {
 }
 
 bool minesweeperTest_solve(const std::string& processName) {
+	// This value should ideally be found using the image-processor, but need better image-comparator
 	const size_t tileSize = 16u;
 
 	// 1. Setup driver (communicator with minesweeper window)
@@ -36,7 +47,7 @@ bool minesweeperTest_solve(const std::string& processName) {
 
 	// 2. Create a image processing pipeline (transform raw window-print into grid)
 	auto pipeline = createPipeline();
-
+	bool wasOver = false; // urgh
 	while (true) {
 		// 3. get print
 		auto print = windowDriver.printWindow();
@@ -47,11 +58,17 @@ bool minesweeperTest_solve(const std::string& processName) {
 		auto grid = pipeline->process(gridData);
 
 		if (gridData.isGameLost) {
-			std::cout << "Sorry master..." << std::endl;
+			if (!wasOver){
+				stats.gamesLost++;
+				std::cout << "LOST! Win Rate: " << stats.getWinPercentage() << "%" << std::endl;
+			}
 			Sleep(1000);
 		}
 		else if (gridData.isGameWon) {
-			std::cout << "WE WON!" << std::endl;
+			if (!wasOver) {
+				stats.gamesWon++;
+				std::cout << "WON! Win Rate: " << stats.getWinPercentage() << "%" << std::endl;
+			}
 			Sleep(1000);
 		}
 		else {
@@ -73,6 +90,8 @@ bool minesweeperTest_solve(const std::string& processName) {
 
 			Sleep(500);
 		}
+
+		wasOver = gridData.isGameLost || gridData.isGameWon;
 	}
 }
 
