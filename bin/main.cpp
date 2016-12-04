@@ -14,7 +14,7 @@ using namespace helmesjo;
 using namespace minesweeper_sweeper::resources;
 using namespace std;
 
-void minesweeperTest_solve(const std::string& processName) {
+bool minesweeperTest_solve(const std::string& processName) {
 	const size_t tileSize = 16u;
 
 	// Setup driver (communicator with minesweeper window)
@@ -53,13 +53,13 @@ void minesweeperTest_solve(const std::string& processName) {
 	else
 		windowDriver.sendRightClick(next.tile.x, next.tile.y);
 
+	return gridData.isGameOver;
 }
 
 int main(int argc, char* argv[])
 {
 	const auto processName = "Minesweeper"s;
-	while (true) {
-		minesweeperTest_solve(processName);
+	while (!minesweeperTest_solve(processName)) {
 		Sleep(2000);
 	}
 
