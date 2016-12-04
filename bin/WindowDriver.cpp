@@ -26,12 +26,6 @@ WindowDriver::WindowDriver(const std::string& processName)
 
 std::shared_ptr<Image> WindowDriver::printWindow()
 {
-	//auto imageDeleter = [](CImage* img) { 
-	//	img->ReleaseDC();
-	//	delete img;
-	//};
-	//auto print = std::shared_ptr<CImage>(new CImage(), imageDeleter);
-
 	auto print = CImage();
 	RECT rect = { 0 };
 	GetWindowRect(windowHandle, &rect);
@@ -49,13 +43,6 @@ std::shared_ptr<Image> WindowDriver::printWindow()
 	return std::make_shared<Image>(path);
 }
 
-void WindowDriver::PrintAndSaveToFile(const std::string& filePath)
-{
-	auto print = printWindow();
-	print->saveToPath(filePath);
-	//print->Save(filePath.c_str());
-}
-
 INPUT MouseSetup(unsigned int x, unsigned int y)
 {
 	INPUT ip;
@@ -69,6 +56,7 @@ INPUT MouseSetup(unsigned int x, unsigned int y)
 	return ip;
 }
 
+// This is not working with multiple screens with different scalings
 POINT calculateXY(HWND windowHandle, unsigned int* x, unsigned int* y) {
 	SetForegroundWindow(windowHandle);
 	// Assume mouse-click for now (fix later)
@@ -110,20 +98,3 @@ void helmesjo::WindowDriver::sendRightClick(unsigned int x, unsigned int y)
 	ip.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_RIGHTUP);
 	SendInput(1, &ip, sizeof(INPUT));
 }
-
-/*
-	//copy to clipboard
-	OpenClipboard(NULL);
-	EmptyClipboard();
-	SetClipboardData(CF_BITMAP, hbmp);
-	CloseClipboard();
-
-	//release
-	DeleteDC(hdc);
-	DeleteObject(hbmp);
-	ReleaseDC(NULL, hdcScreen);
-
-	cout << "success copy to clipboard, please paste it to the 'mspaint'" << endl;
-
-	return 0;
-	*/

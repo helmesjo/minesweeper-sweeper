@@ -16,8 +16,6 @@ namespace helmesjo {
 
 		// Whould perferably return a UniquePtr here, but don't want to expose custom deleter-details (to keep it simple in this case). Simplicity vs allocation trade-off...
 		std::shared_ptr<Image> printWindow();
-		// Debugging only: Remove when done.
-		void PrintAndSaveToFile(const std::string& filePath);
 
 		void sendLeftClick(unsigned int x, unsigned int y);
 		void sendRightClick(unsigned int x, unsigned int y);
