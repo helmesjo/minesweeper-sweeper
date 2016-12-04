@@ -1,5 +1,7 @@
 #include "WindowDriver.h"
+#include <atlimage.h>
 #include <stdexcept>
+#include "Image.h"
 
 using namespace helmesjo;
 
@@ -11,27 +13,31 @@ WindowDriver::WindowDriver(const std::string& processName)
 		throw std::invalid_argument("Could not find window with name: " + processName);
 }
 
-std::shared_ptr<CImage> WindowDriver::printWindow()
+std::shared_ptr<Image> WindowDriver::printWindow()
 {
-	auto imageDeleter = [](CImage* img) { 
-		img->ReleaseDC();
-		delete img;
-	};
-	auto print = std::shared_ptr<CImage>(new CImage(), imageDeleter);
+	//auto imageDeleter = [](CImage* img) { 
+	//	img->ReleaseDC();
+	//	delete img;
+	//};
+	//auto print = std::shared_ptr<CImage>(new CImage(), imageDeleter);
 
+	auto print = CImage();
 	RECT rect = { 0 };
 	GetWindowRect(windowHandle, &rect);
-	print->Create(rect.right - rect.left, rect.bottom - rect.top, 32);
-	HDC device_context_handle = print->GetDC();
+	auto width = static_cast<size_t>(rect.right - rect.left);
+	auto height = static_cast<size_t>(rect.bottom - rect.top);
+	print.Create(width, height, 32);
+	HDC device_context_handle = print.GetDC();
 	::PrintWindow(windowHandle, device_context_handle, PW_CLIENTONLY);
 
-	return print;
+	return std::make_shared<Image>(static_cast<const unsigned char * const>(print.GetBits()), width, height);
 }
 
 void WindowDriver::PrintAndSaveToFile(const std::string& filePath)
 {
 	auto print = printWindow();
-	print->Save(filePath.c_str());
+	print->saveToPath(filePath);
+	//print->Save(filePath.c_str());
 }
 
 INPUT MouseSetup(unsigned int x, unsigned int y)

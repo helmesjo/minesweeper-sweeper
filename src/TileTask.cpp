@@ -13,6 +13,14 @@ helmesjo::TileTask::TileTask(Imgptr flagTile, Imgptr bombTile, Imgptr unknownTil
 {
 }
 
+helmesjo::TileTask::TileTask(Imgptr flagTile, Imgptr bombTile, Imgptr unknownTile, std::vector<Imgptr> numberTiles):
+	flagTile(std::move(flagTile)),
+	bombTile(std::move(bombTile)),
+	unknownTile(std::move(unknownTile)),
+	numberTiles(std::move(numberTiles))
+{
+}
+
 helmesjo::TileTask::~TileTask() = default;
 
 void helmesjo::TileTask::process(GridData & data) const

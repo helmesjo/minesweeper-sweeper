@@ -34,6 +34,8 @@ namespace helmesjo {
 		struct Impl;
 	public:
 		Image(const std::string& filepath, std::shared_ptr<ImageMatcher> matcher = nullptr);
+		Image(const unsigned char * const buffer, size_t width, size_t height);
+
 		Image(std::unique_ptr<Impl> impl);
 		~Image();
 		Image(Image&& img) = default;

@@ -1,11 +1,17 @@
 #include <string>
 #include <iostream>
 #include <cpplocate/cpplocate.h>
-#include "WindowDriver.h"
 #include <chrono>
 #include <memory>
 
+#include "resources.h"
+#include "WindowDriver.h"
+#include "ProcessPipeline.h"
+#include "Sweeper.h"
+#include "Tile.h"
+
 using namespace helmesjo;
+using namespace minesweeper_sweeper::resources;
 using namespace std;
 
 void sendInputTest_send_Ctrl_plus_V_to_notepad() {
@@ -111,12 +117,41 @@ void minesweeperTest_click(const std::string& processName) {
 
 }
 
+void minesweeperTest_solve(const std::string& processName) {
+	// Setup driver (communicator with minesweeper window)
+	auto windowDriver = WindowDriver(processName);
+	// Create a image processing pipeline (transform raw window-print into grid)
+	auto pipeData = PipeData();
+	pipeData.gridTopLeftImg = std::make_shared<Image>(getPath(IMG_MINE_GRID_TOPLEFT));
+	pipeData.gridBotRightImg = std::make_shared<Image>(getPath(IMG_MINE_GRID_BOTRIGHT));
+	pipeData.flagTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_FLAG));
+	pipeData.bombTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_BOMB));
+	pipeData.unknownTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_UNKNOWN));
+	pipeData.numberTiles = { std::make_shared<Image>(getPath(IMG_MINE_TILE_ONE)), std::make_shared<Image>(getPath(IMG_MINE_TILE_TWO)) };
+
+	auto pipeline = ProcessPipeline::createDefaultPipeline(pipeData);
+
+	auto print = windowDriver.printWindow();
+
+	GridData gridData(print);
+	auto grid = pipeline->process(gridData);
+
+	auto sweeper = Sweeper();
+
+	auto leastProbableMine = sweeper.findLeastProbableMine(*grid);
+
+	InputData input;
+	windowDriver.sendInput(input);
+
+}
+
 int main(int argc, char* argv[])
 {
-	auto processName = "Minesweeper"s;
-	for (auto i = 0u; i<5; i++)
+	const auto processName = "Minesweeper"s;
+	//for (auto i = 0u; i<5; i++)
 		//printMinesweeperTest();
-	minesweeperTest_click(processName);
+	minesweeperTest_solve(processName);
+	//minesweeperTest_click(processName);
 	//sendInputTest_send_Ctrl_plus_V_to_notepad();
 	//sendInputTest_send_Mouseclick_at_position();
 

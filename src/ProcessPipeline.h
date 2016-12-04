@@ -9,18 +9,20 @@ namespace helmesjo {
 	template<typename T>
 	class Grid;
 
-	/* DATA: This is used as input & output value for each task. It holds data that can be read/written to.
+	using ImgPtr = std::shared_ptr<Image>;
+
+	/* DATA: This is used as input & output value for each task. It holds data that should be read/written to.
 			 If no exception is thrown while processing pipeline, createResult will return a complete object.
 	*/
 
 	struct GridData {
-		GridData(std::unique_ptr<Image> windowImage);
+		GridData(std::shared_ptr<Image> windowImage);
 		~GridData();
 
 		// 1. Supplied on creation
-		std::unique_ptr<Image> windowImage = nullptr;
+		std::shared_ptr<Image> windowImage = nullptr;
 		// 2. Setup by WindowTask
-		std::unique_ptr<Image> gridImage = nullptr;
+		std::shared_ptr<Image> gridImage = nullptr;
 		// 3. Setup by GridTask
 		size_t nrColumns = 0u, nrRows = 0u, tileWidth = 0u, tileHeight = 0u;
 		// 4. Setup by TileTask
@@ -40,10 +42,23 @@ namespace helmesjo {
 
 	/* PIPELINE: Consists of a chain of tasks. They will process input-data in order. */
 
+	struct PipeData {
+		size_t tileWidth, tileHeight;
+
+		ImgPtr gridTopLeftImg;
+		ImgPtr gridBotRightImg;
+		ImgPtr flagTile;
+		ImgPtr bombTile;
+		ImgPtr unknownTile;
+
+		std::vector<ImgPtr> numberTiles; // In order
+	};
+
 	class ProcessPipeline {
 		using TaskPtr = std::unique_ptr<ProcessTask>;
 
 	public:
+		static std::unique_ptr<ProcessPipeline> createDefaultPipeline(const PipeData& imgReferences);
 		~ProcessPipeline();
 
 		void addTask(TaskPtr task);
@@ -52,4 +67,6 @@ namespace helmesjo {
 	private:
 		std::vector<TaskPtr> tasks;
 	};
+
+
 }

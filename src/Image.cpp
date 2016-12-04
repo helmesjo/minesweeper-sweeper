@@ -8,8 +8,7 @@ using CImg = cimg_library::CImg<unsigned char>;
 
 struct Image::Impl {
 	Impl(const std::string& filepath, std::shared_ptr<ImageMatcher> matcher):
-		image(filepath.c_str()),
-		matcher(std::move(matcher ? matcher : std::make_shared<PixelPerfectMatcher>()))
+		Impl(CImg(filepath.c_str()), std::move(matcher ? matcher : std::make_shared<PixelPerfectMatcher>()))
 	{}
 
 	Impl(CImg&& img, std::shared_ptr<ImageMatcher> matcher) :
@@ -22,7 +21,12 @@ struct Image::Impl {
 };
 
 Image::Image(const std::string& filepath, std::shared_ptr<ImageMatcher> matcher) :
-	pimpl(std::make_unique<Impl>(filepath, std::move(matcher)))
+	pimpl(std::make_unique<Impl>(filepath, std::move(matcher ? matcher : std::make_shared<PixelPerfectMatcher>())))
+{
+}
+
+helmesjo::Image::Image(const unsigned char * const buffer, size_t width, size_t height):
+	pimpl(std::make_unique<Impl>(CImg(buffer, width, height), nullptr))
 {
 }
 

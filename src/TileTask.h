@@ -10,6 +10,7 @@ namespace helmesjo {
 		using Imgptr = std::shared_ptr<Image>;
 	public:
 		TileTask(Imgptr flagTile, Imgptr bombTile, Imgptr unknownTile, std::initializer_list<Imgptr> numberTiles);
+		TileTask(Imgptr flagTile, Imgptr bombTile, Imgptr unknownTile, std::vector<Imgptr> numberTiles);
 		~TileTask();
 
 		virtual void process(GridData& data) const override;
