@@ -14,12 +14,7 @@ using namespace helmesjo;
 using namespace minesweeper_sweeper::resources;
 using namespace std;
 
-bool minesweeperTest_solve(const std::string& processName) {
-	const size_t tileSize = 16u;
-
-	// Setup driver (communicator with minesweeper window)
-	auto windowDriver = WindowDriver(processName);
-	// Create a image processing pipeline (transform raw window-print into grid)
+auto createPipeline() {
 	auto pipeData = PipeData();
 	pipeData.gridTopLeft = std::make_shared<Image>(getPath(IMG_MINE_GRID_TOPLEFT));
 	pipeData.gridBotRight = std::make_shared<Image>(getPath(IMG_MINE_GRID_BOTRIGHT));
@@ -27,41 +22,66 @@ bool minesweeperTest_solve(const std::string& processName) {
 	pipeData.bombTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_BOMB));
 	pipeData.unknownTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_UNKNOWN));
 	pipeData.numberTiles = { std::make_shared<Image>(getPath(IMG_MINE_TILE_ONE)), std::make_shared<Image>(getPath(IMG_MINE_TILE_TWO)) };
-	pipeData.gameOver = std::make_shared<Image>(getPath(IMG_MINE_GAMEOVER));
+	pipeData.gameLost = std::make_shared<Image>(getPath(IMG_MINE_GAMELOST));
+	pipeData.gameWon = std::make_shared<Image>(getPath(IMG_MINE_GAMEWON));
+	
+	return ProcessPipeline::createDefaultPipeline(pipeData);
+}
 
-	auto pipeline = ProcessPipeline::createDefaultPipeline(pipeData);
+bool minesweeperTest_solve(const std::string& processName) {
+	const size_t tileSize = 16u;
 
-	auto print = windowDriver.printWindow();
+	// 1. Setup driver (communicator with minesweeper window)
+	auto windowDriver = WindowDriver(processName);
 
-	GridData gridData(print);
-	gridData.tileWidth = tileSize;
-	gridData.tileHeight = tileSize;
-	auto grid = pipeline->process(gridData);
+	// 2. Create a image processing pipeline (transform raw window-print into grid)
+	auto pipeline = createPipeline();
 
-	auto sweeper = Sweeper();
+	while (true) {
+		// 3. get print
+		auto print = windowDriver.printWindow();
 
-	auto next = sweeper.getNextMove(*grid);
+		GridData gridData(print);
+		gridData.tileWidth = tileSize;
+		gridData.tileHeight = tileSize;
+		auto grid = pipeline->process(gridData);
 
-	int halfSize = std::lround(tileSize*0.5);
+		if (gridData.isGameLost) {
+			std::cout << "Sorry master..." << std::endl;
+			Sleep(1000);
+		}
+		else if (gridData.isGameWon) {
+			std::cout << "WE WON!" << std::endl;
+			Sleep(1000);
+		}
+		else {
 
-	// Magic numbers are offset for grid in window (ideally should remember this offset when finding grid inside print (print.getSubImage(...)), but time is of the essence!
-	next.tile.x = next.tile.x * tileSize + 11 + halfSize;
-	next.tile.y = next.tile.y * tileSize + 64 + halfSize;
+			// Solve for next move
+			auto sweeper = Sweeper();
+			auto next = sweeper.getNextMove(*grid);
 
-	if(next.state == NextMove::State::IsSafe)
-		windowDriver.sendLeftClick(next.tile.x, next.tile.y);
-	else
-		windowDriver.sendRightClick(next.tile.x, next.tile.y);
+			int halfSize = std::lround(tileSize*0.5);
+			// Magic numbers are offset for grid in window (ideally should remember this offset when finding grid inside print (print.getSubImage(...)), but time is of the essence!
+			next.tile.x = next.tile.x * tileSize + 11 + halfSize;
+			next.tile.y = next.tile.y * tileSize + 64 + halfSize;
 
-	return gridData.isGameOver;
+			// Perform next move (this should definitly be encapsulated in some Command-design, but just had to get it working asap...
+			if (next.state == NextMove::State::IsSafe)
+				windowDriver.sendLeftClick(next.tile.x, next.tile.y);
+			else
+				windowDriver.sendRightClick(next.tile.x, next.tile.y);
+
+			Sleep(500);
+		}
+	}
 }
 
 int main(int argc, char* argv[])
 {
 	const auto processName = "Minesweeper"s;
-	while (!minesweeperTest_solve(processName)) {
-		Sleep(2000);
-	}
+	
+	// Once we start we play to the finish!
+	minesweeperTest_solve(processName);
 
 	return 0;
 }
@@ -83,14 +103,7 @@ auto driver = WindowDriver(processName);
 
 # SOLVER SIDE: Now all windows-specific stuff is done, and we only use internal data-types (non-windows related "equals" cross-platform)
 
-
-1: Get print
-// Image is a non-windows object part of the solver-lib
-	Image windowPrint = msDriver.getWindowPrint();
-
-
-
-2. Load reference images (used to pattern-match the window etc. to find the grid and the different tiles)
+1. Load reference images (used to pattern-match the window etc. to find the grid and the different tiles)
 	gridTopLeft = loadImage(...path);
 	gridBotRight = loadImage(...path);
 	bombTile = loadImage(...path);
@@ -104,22 +117,25 @@ auto driver = WindowDriver(processName);
 	mineMetaData = (ref-images, tilesize etc)
 	pipeline = ProcessPipeline::createDefaultPipeline(mineMetaData);
 
-3: Solve
+3: Get print
+//	Image is a non-windows object part of the solver-lib
+	Image windowPrint = msDriver.getWindowPrint();
+
+4: Process the print and generate a tile-grid
+	grid = pipeline.process(inputdata);
+
+4: Solve
 // Find what to do with which tile
 	solver = AbstractMineSolver(); // Let implementation vary: First one is naive, and later should be "real" mathematical implementation
 	nextMove = solver.calculateNextMove(grid); // nextMove constains a tile and command (Click or Flag)
 
-
-# WINDOWS SIDE (invoked by solver):
-
-
-4. Perform move
+5. Perform move
 // Send input to minesweeper window
 	button = (nextMove.Type == Click ? mouse1 : mouse2);
-	coords = gridBuilder.getCoords(nextMove.tile);
-	driver.sendClick(button, coords.x, coords.y)
+	command = gridBuilder.getCoords(nextMove.tile);
+	driver.performCommand(command)
 
 
-5. if_not_done(REPEAT_1).
+6. if_not_done(REPEAT_1).
 
 */

@@ -8,11 +8,12 @@ namespace helmesjo {
 
 	class GridTask : public ProcessTask {
 	public:
-		GridTask(std::shared_ptr<Image> gameOverImg);
+		GridTask(std::shared_ptr<Image> gameLostImg, std::shared_ptr<Image> gameWonImg);
 
 		virtual void process(GridData& data) const override;
 
 	private:
-		std::shared_ptr<Image> gameOverImg;
+		std::shared_ptr<Image> gameLostImg;
+		std::shared_ptr<Image> gameWonImg;
 	};
 }

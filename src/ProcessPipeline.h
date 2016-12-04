@@ -31,7 +31,8 @@ namespace helmesjo {
 		std::shared_ptr<Image> gridImage = nullptr;
 		// 3. Setup by GridTask
 		size_t nrColumns = 0u, nrRows = 0u, tileWidth = 0u, tileHeight = 0u;
-		bool isGameOver = false;
+		bool isGameLost = false;
+		bool isGameWon = false;
 		// 4. Setup by TileTask
 		std::unique_ptr<Grid<Tile>> grid = nullptr;
 		// 5. Called by user
@@ -57,7 +58,8 @@ namespace helmesjo {
 		ImgPtr flagTile;
 		ImgPtr bombTile;
 		ImgPtr unknownTile;
-		ImgPtr gameOver;
+		ImgPtr gameLost;
+		ImgPtr gameWon;
 
 		std::vector<ImgPtr> numberTiles; // In order
 	};

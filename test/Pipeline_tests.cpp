@@ -23,8 +23,9 @@ std::unique_ptr<WindowTask> createValidWindowTask() {
 }
 
 std::unique_ptr<GridTask> createValidGridTask() {
-	auto gameOverImg = std::make_shared<Image>(getPath(IMG_MINE_GAMEOVER));
-	return std::make_unique<GridTask>(gameOverImg);
+	auto gameLostImg = std::make_shared<Image>(getPath(IMG_MINE_GAMELOST));
+	auto gameWonImg = std::make_shared<Image>(getPath(IMG_MINE_GAMEWON));
+	return std::make_unique<GridTask>(gameLostImg, gameWonImg);
 }
 
 std::unique_ptr<TileTask> createValidTileTask() {
@@ -65,7 +66,7 @@ SCENARIO("Pipeline & Tasks", "[Pipeline]") {
 
 			THEN("there should be 9 columns and 9 rows") {
 
-				REQUIRE(data.isGameOver == true);
+				REQUIRE(data.isGameLost == true);
 				REQUIRE(data.nrColumns == 9);
 				REQUIRE(data.nrRows == 9);
 			}
