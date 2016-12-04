@@ -22,11 +22,11 @@ namespace helmesjo {
 		// 2. Setup by WindowTask
 		std::unique_ptr<Image> gridImage = nullptr;
 		// 3. Setup by GridTask
-		size_t nrColumns = 0u, nrRows = 0u;
+		size_t nrColumns = 0u, nrRows = 0u, tileWidth = 0u, tileHeight = 0u;
 		// 4. Setup by TileTask
 		std::unique_ptr<Grid<Tile>> grid = nullptr;
 		// 5. Called by user
-		std::unique_ptr<Grid<Tile>> extractResult() const;
+		std::unique_ptr<Grid<Tile>> extractResult();
 	};
 
 	/* TASK: A task does something specific with the input and may (or may no) modify it. Task are chained in some explicit order to achive final result */

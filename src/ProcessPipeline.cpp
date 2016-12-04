@@ -36,7 +36,7 @@ helmesjo::GridData::GridData(std::unique_ptr<Image> windowImage) :
 
 helmesjo::GridData::~GridData() = default;
 
-std::unique_ptr<Grid<Tile>> helmesjo::GridData::extractResult() const
+std::unique_ptr<Grid<Tile>> helmesjo::GridData::extractResult()
 {
-	return std::unique_ptr<Grid<Tile>>();
+	return std::move(grid);
 }

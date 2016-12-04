@@ -7,8 +7,10 @@ namespace helmesjo {
 	struct Tile {
 		enum class State : char {
 			Unknown,
+			Empty,
 			Flag,
 			Number,
+			Bomb
 		};
 
 		Tile() = default;

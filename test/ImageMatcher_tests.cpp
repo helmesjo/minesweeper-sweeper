@@ -59,7 +59,7 @@ SCENARIO("Scan for subimage", "[ImageScanner]") {
 				auto foundImg = std::get<bool>(result);
 				auto subRect = std::get<SubRect>(result);
 				REQUIRE(foundImg == true);
-				auto expectedSubRect = SubRect{ 186u, 234u, 217u, 265u };
+				auto expectedSubRect = SubRect{ 99u, 207u, 112u, 226u };
 				REQUIRE(subRect == expectedSubRect);
 			}
 		}

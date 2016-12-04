@@ -2,7 +2,10 @@
 #include "ProcessPipeline.h"
 #include "WindowTask.h"
 #include "GridTask.h"
+#include "TileTask.h"
 #include "Image.h"
+#include "Grid.h"
+#include "Tile.h"
 #include "resources.h"
 
 using namespace helmesjo;
@@ -29,20 +32,48 @@ SCENARIO("Pipeline & Tasks", "[Pipeline]") {
 	}
 
 	GIVEN("GridTask with tile-size") {
-		auto tileImg = Image(getPath(IMG_MINE_TILE_EMPTY));
-		auto gridTask = GridTask(tileImg.width(), tileImg.height());
+		auto gridTask = GridTask(32u, 32u);
 
-		WHEN("passed GridData with 9x9 gridImage") {
+		WHEN("finished processing GridData with 9x9 gridImage") {
 			GridData data(nullptr);
 			data.gridImage = std::make_unique<Image>(getPath(IMG_MINE_GRID));
+			gridTask.process(data);
 
 			THEN("there should be 9 columns and 9 rows") {
-				gridTask.process(data);
 
 				REQUIRE(data.nrColumns == 9);
 				REQUIRE(data.nrRows == 9);
 			}
 		}
+	}
+
+	GIVEN("TileTask with ref-images for flag-, bomb-, empty- & number tiles") {
+		auto flagTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_FLAG));
+		auto bombTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_BOMB));
+		auto unknownTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_UNKNOWN));
+		auto oneTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_ONE));
+		auto twoTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_TWO));
+		auto tileTask = TileTask(flagTile, bombTile, unknownTile, { oneTile, twoTile });
+
+		WHEN("finished processing GridData with nrColumns & nrRows specified") {
+			GridData data(nullptr);
+			data.gridImage = std::make_unique<Image>(getPath(IMG_MINE_GRID));
+			data.nrColumns = 9;
+			data.nrRows = 9;
+			data.tileWidth = 32;
+			data.tileHeight = 32;
+			tileTask.process(data);
+
+			THEN("a grid should be exctractable") {
+				auto grid = data.extractResult();
+
+				REQUIRE(data.tileWidth == 32);
+				REQUIRE(data.tileHeight == 32);
+				REQUIRE(grid->width() == 9);
+				REQUIRE(grid->height() == 9);
+			}
+		}
+
 	}
 
 	/*
