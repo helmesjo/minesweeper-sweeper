@@ -5,7 +5,7 @@
 
 using State = helmesjo::Tile::State;
 
-helmesjo::TileTask::TileTask(Imgptr flagTile, Imgptr bombTile, Imgptr unknownTile, std::vector<Imgptr> numberTiles):
+helmesjo::TileTask::TileTask(Imgptr flagTile, Imgptr bombTile, Imgptr unknownTile, std::initializer_list<Imgptr> numberTiles):
 	flagTile(std::move(flagTile)),
 	bombTile(std::move(bombTile)),
 	unknownTile(std::move(unknownTile)),

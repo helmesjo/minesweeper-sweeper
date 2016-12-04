@@ -6,12 +6,14 @@
 
 using namespace helmesjo;
 
-helmesjo::ProcessPipeline::ProcessPipeline(std::vector<TaskPtr> tasks):
-	tasks(std::move(tasks))
-{
-}
+helmesjo::ProcessTask::~ProcessTask() = default;
 
 helmesjo::ProcessPipeline::~ProcessPipeline() = default;
+
+void helmesjo::ProcessPipeline::addTask(TaskPtr task)
+{
+	tasks.push_back(std::move(task));
+}
 
 std::unique_ptr<Grid<Tile>> helmesjo::ProcessPipeline::process(GridData & input) const
 {

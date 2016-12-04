@@ -33,7 +33,7 @@ namespace helmesjo {
 
 	struct ProcessTask {
 
-		virtual ~ProcessTask() = default;
+		virtual ~ProcessTask();
 		virtual void process(GridData& inout) const = 0;
 
 	};
@@ -44,9 +44,9 @@ namespace helmesjo {
 		using TaskPtr = std::unique_ptr<ProcessTask>;
 
 	public:
-		ProcessPipeline(std::vector<TaskPtr> tasks);
 		~ProcessPipeline();
 
+		void addTask(TaskPtr task);
 		std::unique_ptr<Grid<Tile>> process(GridData& input) const;
 
 	private:
