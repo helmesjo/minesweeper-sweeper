@@ -24,6 +24,7 @@ namespace helmesjo {
 		size_t size() const;
 
 		void set(size_t x, size_t y, const T& obj);
+		void set(size_t index, const T& obj);
 		const T& get(size_t x, size_t y) const;
 		T& get(size_t x, size_t y);
 		const T& get(size_t index) const;
@@ -95,6 +96,11 @@ namespace helmesjo {
 	inline void Grid<T>::set(size_t x, size_t y, const T& obj)
 	{
 		auto index = calculate1DIndex(_width, x, y);
+		elements[index] = obj;
+	}
+	template<typename T>
+	inline void Grid<T>::set(size_t index, const T & obj)
+	{
 		elements[index] = obj;
 	}
 	template<typename T>

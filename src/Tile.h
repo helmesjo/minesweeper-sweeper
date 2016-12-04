@@ -18,8 +18,9 @@ namespace helmesjo {
 
 		State state = State::Unknown;
 		unsigned int adjacentMines = 0u;
+		// How likely is it that a mine is adjacent to me?
 		// This is really an external concern (solver), but convenient to store here
-		double mineProbability = 0u;
+		double adjacentMineProbability = 0u;
 	};
 
 	std::ostream& operator << (std::ostream& os, Tile::State state);

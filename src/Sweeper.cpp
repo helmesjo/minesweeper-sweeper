@@ -5,7 +5,7 @@
 
 using namespace helmesjo;
 
-xy helmesjo::Sweeper::findLeastProbableMine(Grid<Tile>& grid)
+xy helmesjo::Sweeper::findLeastProbableMine(TileGrid& grid)
 {
 	calculateMineProbabilities(grid);
 	
@@ -16,9 +16,10 @@ xy helmesjo::Sweeper::findLeastProbableMine(Grid<Tile>& grid)
 	for (auto y = 0u; y < grid.height(); y++) {
 		for (auto x = 0u; x < grid.width(); x++) {
 			auto tile = grid.get(x, y);
-			if (tile.state == Tile::State::Unknown && tile.mineProbability < minProbability) {
+			auto mineProbability = getMineProbability(x, y, grid);
+			if (tile.state == Tile::State::Unknown && mineProbability < minProbability) {
 				coords = { x, y };
-				minProbability = tile.mineProbability;
+				minProbability = mineProbability;
 			}
 		}
 	}
@@ -38,9 +39,10 @@ xy helmesjo::Sweeper::findMostProbableMine(TileGrid & grid)
 	for (auto y = 0u; y < grid.height(); y++) {
 		for (auto x = 0u; x < grid.width(); x++) {
 			auto tile = grid.get(x, y);
-			if (tile.state == Tile::State::Unknown && tile.mineProbability > maxProbability) {
+			auto mineProbability = getMineProbability(x, y, grid);
+			if (tile.state == Tile::State::Unknown && mineProbability > maxProbability) {
 				coords = { x, y };
-				maxProbability = tile.mineProbability;
+				maxProbability = mineProbability;
 			}
 		}
 	}
@@ -53,11 +55,11 @@ NextMove helmesjo::Sweeper::getNextMove(TileGrid & grid)
 	auto safe = findLeastProbableMine(grid);
 	auto unsafe = findMostProbableMine(grid);
 
-	auto safeTile = grid.get(safe.x, safe.y);
-	auto unsafeTile = grid.get(unsafe.x, unsafe.y);
+	auto safeTileProbability = getMineProbability(safe.x, safe.y, grid);
+	auto unsafeTileProbability = getMineProbability(unsafe.x, unsafe.y, grid);
 
 	NextMove next;
-	if (safeTile.mineProbability < (1.0 - unsafeTile.mineProbability))
+	if (safeTileProbability - 0.25 < (1.0 - unsafeTileProbability))
 		next = NextMove{ safe, NextMove::State::IsSafe };
 	else
 		next = NextMove{ unsafe, NextMove::State::IsBomb };
@@ -76,14 +78,25 @@ void helmesjo::Sweeper::calculateMineProbabilities(TileGrid& grid)
 		// We only care about Number-tiles
 		if (tile.state == Tile::State::Number) {
 			// Get all nearby "Unknown" tiles (they might be bombs!)
-			auto adjacent = grid.getAdjacent(i, [](auto tile, auto x, auto y) {
+			auto nrAdjacentFlags = 0u;
+			auto adjacent = grid.getAdjacent(i, [&nrAdjacentFlags](auto tile, auto x, auto y) {
+				if (tile.state == Tile::State::Flag)
+					nrAdjacentFlags++;
+
 				return tile.state == Tile::State::Unknown;
 			});
 			// Add this tiles (i) mine-probability
-			if (adjacent.size()) {
-				auto mineProbability = static_cast<double>(tile.adjacentMines) / static_cast<double>(adjacent.size());
-				for (auto index : adjacent)
-					grid.get(index.x, index.y).mineProbability += mineProbability;
+			if (adjacent.size() > 0) {
+				// This is how likly it is that a mine is around me
+				auto mineProbability = nrAdjacentFlags <= tile.adjacentMines ? static_cast<double>(tile.adjacentMines - nrAdjacentFlags) / static_cast<double>(adjacent.size()) : 0.0;
+				//auto mineProbability = static_cast<double>(tile.adjacentMines) / static_cast<double>(adjacent.size());
+				
+				tile.adjacentMineProbability = mineProbability;
+				
+				grid.set(i, tile);
+
+				//for (auto index : adjacent)
+				//	grid.get(index.x, index.y).adjacentMineProbability += mineProbability;
 			}
 		}
 	}
@@ -91,11 +104,30 @@ void helmesjo::Sweeper::calculateMineProbabilities(TileGrid& grid)
 
 double helmesjo::Sweeper::getMineProbability(size_t x, size_t y, const TileGrid& grid) const
 {
-	return grid.get(x, y).mineProbability;
+	auto tile = grid.get(x, y);
+
+	// Can't be bomb
+	if (tile.state != Tile::State::Unknown)
+		return 0.0;
+
+	// Look through adjacent Number-tiles and detirmine how probable it is that the specifiec tile is a bomb
+
+	auto mineProbability = 0.0;
+
+	auto adjacent = grid.getAdjacent(x, y, [](auto tile, auto x, auto y) {
+		return tile.state == Tile::State::Number;
+	});
+
+	for (auto index : adjacent) {
+		auto adjProbability = grid.get(index.x, index.y).adjacentMineProbability;
+		mineProbability += adjProbability;
+	}
+
+	return mineProbability;
 }
 
 void helmesjo::Sweeper::resetProbabilities(TileGrid& grid)
 {
 	for (auto& tile : grid)
-		tile.mineProbability = 0.0; 
+		tile.adjacentMineProbability = 0.0; 
 }
