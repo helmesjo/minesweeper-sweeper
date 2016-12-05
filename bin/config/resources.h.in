@@ -23,5 +23,7 @@ namespace @META_PROJECT_NAMESPACE@ {
 		
 		const std::string IMG_MINE_TILE_ONE = "img-mine-tile-one.bmp";
 		const std::string IMG_MINE_TILE_TWO = "img-mine-tile-two.bmp";
+		const std::string IMG_MINE_TILE_THREE = "img-mine-tile-three.bmp";
+		const std::string IMG_MINE_TILE_FOUR = "img-mine-tile-four.bmp";
 	}
 }

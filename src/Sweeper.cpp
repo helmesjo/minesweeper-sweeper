@@ -48,17 +48,19 @@ double helmesjo::Sweeper::calculateMineProbability(size_t x, size_t y, const Til
 		return 0.0;
 
 	// Look through adjacent Number-tiles and detirmine how probable it is that the specifiec tile is a bomb
-
-	auto mineProbability = 0.0;
-
 	auto adjacent = grid.getAdjacent(x, y, [](auto tile, auto x, auto y) {
 		return tile.state == Tile::State::Number;
 	});
 
-	for (auto index : adjacent) {
-		auto adjProbability = grid.get(index.x, index.y).adjacentMineProbability;
-		// Use the lowest probability, since that indicates that this tile has more knowledge from it's neighbors!
-		mineProbability += adjProbability;
+	// This should be some value calculated from nr of mines on board and unknown tiles
+	auto mineProbability = 0.5;
+
+	if (adjacent.size() > 0) {
+		for (auto index : adjacent) {
+			auto adjProbability = grid.get(index.x, index.y).adjacentMineProbability;
+			// Use the lowest probability, since that indicates that this tile has more knowledge from it's neighbors!
+			mineProbability = std::max(mineProbability, adjProbability);
+		}
 	}
 
 	return mineProbability;
@@ -118,7 +120,7 @@ NextMove helmesjo::Sweeper::getNextMove(TileGrid & grid)
 	auto unsafeTileProbability = calculateMineProbability(unsafe.x, unsafe.y, grid);
 
 	NextMove next;
-	if (safeTileProbability - 0.25 < (1.0 - unsafeTileProbability))
+	if (unsafeTileProbability < 0.75f)//safeTileProbability*0.95 < (1.0 - unsafeTileProbability))
 		next = NextMove{ safe, NextMove::State::IsSafe };
 	else
 		next = NextMove{ unsafe, NextMove::State::IsBomb };

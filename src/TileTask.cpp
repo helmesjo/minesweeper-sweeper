@@ -52,5 +52,5 @@ void helmesjo::TileTask::process(GridData & data) const
 			grid->set(x, y, tile);
 		}
 	}
-		data.grid = std::move(grid);
+	data.grid = std::move(grid);
 }

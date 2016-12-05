@@ -33,7 +33,12 @@ auto createPipeline() {
 	pipeData.flagTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_FLAG));
 	pipeData.bombTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_BOMB));
 	pipeData.unknownTile = std::make_shared<Image>(getPath(IMG_MINE_TILE_UNKNOWN));
-	pipeData.numberTiles = { std::make_shared<Image>(getPath(IMG_MINE_TILE_ONE)), std::make_shared<Image>(getPath(IMG_MINE_TILE_TWO)) };
+	pipeData.numberTiles = { 
+		std::make_shared<Image>(getPath(IMG_MINE_TILE_ONE)), 
+		std::make_shared<Image>(getPath(IMG_MINE_TILE_TWO)),
+		std::make_shared<Image>(getPath(IMG_MINE_TILE_THREE)),
+		std::make_shared<Image>(getPath(IMG_MINE_TILE_FOUR)),
+	};
 	pipeData.gameLost = std::make_shared<Image>(getPath(IMG_MINE_GAMELOST));
 	pipeData.gameWon = std::make_shared<Image>(getPath(IMG_MINE_GAMEWON));
 	
