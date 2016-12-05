@@ -56,9 +56,11 @@ double helmesjo::Sweeper::calculateMineProbability(size_t x, size_t y, const Til
 	auto mineProbability = 0.5;
 
 	if (adjacent.size() > 0) {
+		mineProbability = 0.0;
 		for (auto index : adjacent) {
+			// Probabilities out the window here: Just aim for the tile who knows the most!
+			// Does not consider if one has probability 0 and another 0.6, we always go for the bigger... = wrong.
 			auto adjProbability = grid.get(index.x, index.y).adjacentMineProbability;
-			// Use the lowest probability, since that indicates that this tile has more knowledge from it's neighbors!
 			mineProbability = std::max(mineProbability, adjProbability);
 		}
 	}
@@ -120,7 +122,7 @@ NextMove helmesjo::Sweeper::getNextMove(TileGrid & grid)
 	auto unsafeTileProbability = calculateMineProbability(unsafe.x, unsafe.y, grid);
 
 	NextMove next;
-	if (unsafeTileProbability < 0.75f)//safeTileProbability*0.95 < (1.0 - unsafeTileProbability))
+	if (safeTileProbability * 0.95 < (1.0 - unsafeTileProbability))
 		next = NextMove{ safe, NextMove::State::IsSafe };
 	else
 		next = NextMove{ unsafe, NextMove::State::IsBomb };
